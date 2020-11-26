@@ -1,7 +1,9 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style x:Key="TabItem"
-               TargetType="{x:Type TabItem}">
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CmdControl.Custom">
+
+    <Style TargetType="{x:Type local:UTabItem}">
         <Setter Property="Header"
                     Value="{Binding Name}" />
         <Setter Property="FocusVisualStyle"
@@ -41,7 +43,10 @@
                                 Padding="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                 UseLayoutRounding="{TemplateBinding UseLayoutRounding}">
-                        <ContentPresenter x:Name="contentPresenter"
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse x:Name="StateShow" Height="{TemplateBinding FontSize}" Width="{TemplateBinding FontSize}"
+                                     Fill="{Binding ShowColor,RelativeSource={RelativeSource Mode=TemplatedParent},Mode=TwoWay}"/>
+                            <ContentPresenter x:Name="contentPresenter"
                                               Margin="{TemplateBinding Padding}"
                                               HorizontalAlignment="{Binding HorizontalContentAlignment,
                                                                         RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
@@ -51,6 +56,7 @@
                                               Focusable="False"
                                               RecognizesAccessKey="True"
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
@@ -59,7 +65,6 @@
                                                Value="true" />
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
                                                Value="Top" />
-
                             </MultiDataTrigger.Conditions>
                             <Setter TargetName="border"
                                         Property="Cursor"
@@ -96,30 +101,6 @@
                                         Value="0.56" />
                         </MultiDataTrigger>
                     </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <Style x:Key="TabControl"
-               TargetType="{x:Type TabControl}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TabControl}">
-                    <StackPanel Orientation="Horizontal">
-                        <ScrollViewer VerticalScrollBarVisibility="Visible" Style="{StaticResource ScrollViewer}">
-                            <TabPanel x:Name="HeaderPanel"
-                              Panel.ZIndex ="1" 
-                              KeyboardNavigation.TabIndex="1"
-                              Grid.Column="0"
-                              Grid.Row="0"
-                              Margin="2,2,2,0"
-                              IsItemsHost="true"/>
-                        </ScrollViewer>
-                        <ContentPresenter x:Name="PART_SelectedContentHost"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                          Margin="{TemplateBinding Padding}"
-                                          ContentSource="SelectedContent"/>
-                    </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

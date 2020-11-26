@@ -46,5 +46,8 @@
     <Page Update="Style\TextBox.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Custom\Xaml\UTabItem.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 </Project>

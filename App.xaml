@@ -4,6 +4,21 @@
              xmlns:local="clr-namespace:CmdControl"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CmdControl;component/Style/Button.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Style/CheckBox.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Style/ComboBox.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Style/ContextMenu.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Style/GroupBox.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Style/Label.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Style/ListView.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Style/RadioButton.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Style/Slider.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Style/TabControl.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Style/TextBox.xaml"/>
+                <ResourceDictionary Source="/CmdControl;component/Custom/Xaml/UTabItem.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
