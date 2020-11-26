@@ -8,10 +8,33 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Rectangle Stroke="#FF5ABED6" StrokeThickness="2"/>
-        <TabControl Margin="2,2,2,2" TabStripPlacement="Left" Style="{DynamicResource TabControl}">
+        <TabControl TabStripPlacement="Left" Style="{DynamicResource TabControl}" Background="White">
             <local:UTabItem Header="测试" ShowColor="Red">
                 <Grid>
-                    
+                    <Button Content="Button"/>
+
+                </Grid>
+            </local:UTabItem>
+            <local:UTabItem Header="测试" ShowColor="Red">
+                <Grid>
+                    <Canvas Height="100" Width="100"/>
+
+                </Grid>
+            </local:UTabItem>
+            <local:UTabItem Header="测试" ShowColor="Red">
+                <Grid>
+                    <Label Content="Label"/>
+
+                </Grid>
+            </local:UTabItem>
+            <local:UTabItem Header="测试" ShowColor="Red">
+                <Grid>
+
+                </Grid>
+            </local:UTabItem>
+            <local:UTabItem Header="测试" ShowColor="Red">
+                <Grid>
+
                 </Grid>
             </local:UTabItem>
         </TabControl>
