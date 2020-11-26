@@ -10,5 +10,41 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Style\Button.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\CheckBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\ComboBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\ContextMenu.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\GroupBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\Label.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\ListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\PassWordBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\RadioButton.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\Slider.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\TabControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Style\TextBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 </Project>
