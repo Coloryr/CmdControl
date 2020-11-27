@@ -41,16 +41,17 @@
                                 Padding="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                 UseLayoutRounding="{TemplateBinding UseLayoutRounding}">
-                        <ContentPresenter x:Name="contentPresenter"
-                                              Margin="{TemplateBinding Padding}"
-                                              HorizontalAlignment="{Binding HorizontalContentAlignment,
+                        <TextBlock x:Name="contentPresenter"
+                                       Margin="{TemplateBinding Margin}"
+                                       Width="70"
+                                       TextWrapping="Wrap"
+                                       Text="{TemplateBinding Header}"
+                                       HorizontalAlignment="{Binding HorizontalContentAlignment,
                                                                         RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                              VerticalAlignment="{Binding VerticalContentAlignment,
+                                       VerticalAlignment="{Binding VerticalContentAlignment,
                                                                       RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                              ContentSource="Header"
-                                              Focusable="False"
-                                              RecognizesAccessKey="True"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                       Focusable="False"
+                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
@@ -147,17 +148,20 @@
                 <ControlTemplate TargetType="{x:Type TabControl}">
                     <StackPanel Orientation="Horizontal">
                         <ScrollViewer VerticalScrollBarVisibility="Visible" Style="{StaticResource ScrollViewer}">
-                            <TabPanel x:Name="HeaderPanel" Background="{TemplateBinding Background}"
+                            <TabPanel x:Name="HeaderPanel"
                               Panel.ZIndex ="1" 
                               KeyboardNavigation.TabIndex="1"
                               Grid.Column="0"
                               Grid.Row="0"
                               Margin="2,2,2,0"
-                              IsItemsHost="true"/>
+                              IsItemsHost="true"
+                              Background="#FFF4F4F5"/>
                         </ScrollViewer>
-                        <ContentPresenter x:Name="PART_SelectedContentHost"
+                        <ContentPresenter x:Name="PART_SelectedContentHost" Margin="2,2,2,2"
+                                          Width="{TemplateBinding Width}"
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Top"
                                           ContentSource="SelectedContent"/>
                     </StackPanel>
                 </ControlTemplate>

@@ -45,17 +45,19 @@
                                 UseLayoutRounding="{TemplateBinding UseLayoutRounding}">
                         <StackPanel Orientation="Horizontal">
                             <Ellipse x:Name="StateShow" Height="{TemplateBinding FontSize}" Width="{TemplateBinding FontSize}"
-                                     Fill="{Binding ShowColor,RelativeSource={RelativeSource Mode=TemplatedParent},Mode=TwoWay}"/>
-                            <ContentPresenter x:Name="contentPresenter"
-                                              Margin="{TemplateBinding Padding}"
-                                              HorizontalAlignment="{Binding HorizontalContentAlignment,
+                                     Fill="{Binding ShowColor,RelativeSource={RelativeSource Mode=TemplatedParent},Mode=TwoWay}"
+                                     Margin="0,0,4,0"/>
+                            <TextBlock x:Name="contentPresenter"
+                                       Margin="{TemplateBinding Margin}"
+                                       Width="70"
+                                       TextWrapping="Wrap"
+                                       Text="{TemplateBinding Header}"
+                                       HorizontalAlignment="{Binding HorizontalContentAlignment,
                                                                         RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                              VerticalAlignment="{Binding VerticalContentAlignment,
+                                       VerticalAlignment="{Binding VerticalContentAlignment,
                                                                       RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                              ContentSource="Header"
-                                              Focusable="False"
-                                              RecognizesAccessKey="True"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                       Focusable="False"
+                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
