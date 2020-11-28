@@ -8,7 +8,7 @@
         Title="CmdControl" Height="600" Width="1000" Icon="/Color_yr.ico" WindowStartupLocation="Manual" ResizeMode="CanMinimize">
     <Grid>
         <Rectangle Fill="#FFF4F4F5" Stroke="#FF5ABED6" StrokeThickness="2"/>
-        <TabControl Margin="2,2,2,2" TabStripPlacement="Left" Style="{DynamicResource TabControl}">
+        <TabControl Margin="2,2,2,2" TabStripPlacement="Left" Style="{DynamicResource TabControl}" Name="TabList">
             <local:UTabItem Header="Start" ShowColor="Blue">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Height="553" Width="855">
                     <Rectangle Fill="#FFF4F4F5" Stroke="#FF5ABED6" StrokeThickness="2"/>
@@ -31,19 +31,23 @@
                             <Label Content="附加参数" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,73,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,78,0,0" Height="42"
                                      VerticalScrollBarVisibility="Auto"/>
-                            <Button Content="添加实例" Margin="5,128,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
-                            <Button Content="清空参数" Margin="90,128,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
+                            <Button Content="添加实例" Margin="5,128,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="AddCmd_Click"/>
+                            <Button Content="清空参数" Margin="90,128,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="Clear_Click"/>
 
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="机器人连接" Margin="10,311,0,0" Height="95" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
                         <Grid>
                             <Label Content="连接地址" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <TextBox TextWrapping="Wrap" Width="185" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"/>
-                            <Button Content="连接" Margin="353,32,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
+                            <TextBox TextWrapping="Wrap" Width="185" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"
+                                     Text="{Binding 机器人连接.地址}" Name="RebotIP"/>
+                            <Button Content="连接" Margin="353,32,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="Robot_Click"
+                                    Name="RebotButton"/>
                             <Label Content="连接端口" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="264,0,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="95" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="338,4,0,0"/>
-                            <CheckBox Content="自动连接" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0" Style="{DynamicResource Check}"/>
+                            <TextBox TextWrapping="Wrap" Width="95" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="338,4,0,0"
+                                     Text="{Binding 机器人连接.端口}" Name="RebotPort"/>
+                            <CheckBox Content="自动连接" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,35,0,0" 
+                                      Style="{DynamicResource Check}" IsChecked="{Binding 机器人连接.自动连接}"/>
 
                         </Grid>
                     </GroupBox>
@@ -62,22 +66,25 @@
                     <GroupBox Header="指令设置" Margin="462,119,0,0" Height="387" VerticalAlignment="Top" HorizontalAlignment="Left" Width="383">
                         <Grid>
                             <Label Content="列表指令" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"/>
+                            <Label Content="运行群号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,131,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"
+                                     Text="{Binding 机器人指令.列表指令}"/>
 
                             <Label Content="启动指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,32,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,36,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,36,0,0"
+                                     Text="{Binding 机器人指令.启动指令}"/>
                             <Button Content="保存" Margin="244,322,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
                             <Label Content="关闭指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,64,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,68,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,68,0,0"
+                                     Text="{Binding 机器人指令.关闭指令}"/>
+                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,135,0,0"
+                                     Text="{Binding 机器人设置.运行群号}"/>
+                            <Label Content="机器人号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,161,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="74,0,0,0"
+                                     Text="{Binding 机器人设置.机器人号}"/>
                         </Grid>
                     </GroupBox>
-
                 </Grid>
-            </local:UTabItem>
-            <local:UTabItem Header="Start" ShowColor="Blue">
-                <local:CmdShow HorizontalAlignment="Left" VerticalAlignment="Top" Height="553" Width="855">
-
-                </local:CmdShow>
             </local:UTabItem>
         </TabControl>
 

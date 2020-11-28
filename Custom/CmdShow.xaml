@@ -8,26 +8,37 @@
              d:DesignHeight="553" d:DesignWidth="855">
     <Grid>
         <Rectangle Fill="#FFF4F4F5" Stroke="#FF5ABED6" StrokeThickness="2"/>
-        <GroupBox Header="日志" Margin="4,4,4,69">
+        <GroupBox Header="日志" Margin="4,4,4,98">
             <Grid>
-                <TextBox Text="" TextWrapping="Wrap"
+                <TextBox TextWrapping="Wrap" Name="Log" IsReadOnly="True"
                          VerticalScrollBarVisibility="Visible" Margin="-1,-1,-1,-1"/>
-                <Button Content="清空" Margin="0,-25,1,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60"/>
-                <Button Content="保存" Margin="0,-25,66,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60"/>
+                <Button Content="清空" Margin="0,-25,1,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" Click="Clear_Click"/>
+                <Button Content="保存" Margin="0,-25,66,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" Click="Save_Click"/>
 
             </Grid>
         </GroupBox>
-        <GroupBox Header="操作" Margin="4,489,4,4">
+        <GroupBox Header="操作" Margin="4,460,4,4">
             <Grid>
-                <Button Content="启动" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="10,4,0,0"/>
-                <Button Content="关闭" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="95,4,0,0"/>
-                <Button Content="重启" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="180,4,0,0"/>
-                <Button Content="编辑" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="265,4,0,0"/>
-                <Button Content="删除" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="350,4,0,0"/>
-                <CheckBox Content="自动重启" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="445,5,0,0" Style="{DynamicResource Check}"/>
-                <CheckBox Content="远程控制" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="545,5,0,0" Style="{DynamicResource Check}"/>
-                <CheckBox Content="启动反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="645,5,0,0" Style="{DynamicResource Check}"/>
-                <CheckBox Content="崩溃反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="745,5,0,0" Style="{DynamicResource Check}"/>
+                <Button Content="启动" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="10,32,0,0" 
+                        Click="Start_Click" Name="StartButton"/>
+                <Button Content="关闭" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="95,32,0,0" 
+                        Click="Close_Click" Name="CloseButton" IsEnabled="False"/>
+                <Button Content="重启" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="180,32,0,0" 
+                        Click="Restart_Click" Name="RestartButton"/>
+                <Button Content="编辑" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="265,32,0,0" 
+                        Click="Edit_Click" Name="EditButton"/>
+                <Button Content="删除" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="350,32,0,0" 
+                        Click="Delete_Click" Name="DeleteButton"/>
+                <CheckBox Content="远程控制" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="440,33,0,0" Style="{DynamicResource Check}"
+                          IsChecked="{Binding 远程控制}"/>
+                <CheckBox Content="崩溃重启" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="525,33,0,0" Style="{DynamicResource Check}"
+                          IsChecked="{Binding 远程控制}"/>
+                <CheckBox Content="启动反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="610,33,0,0" Style="{DynamicResource Check}"
+                          IsChecked="{Binding 启动反馈}"/>
+                <CheckBox Content="关闭反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="695,33,0,0" Style="{DynamicResource Check}"
+                          IsChecked="{Binding 关闭反馈}"/>
+                <TextBox x:Name="Command" TextWrapping="Wrap" Width="738" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0"/>
+                <Button Content="发送" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="753,5,0,0" Click="Command_Click"/>
             </Grid>
         </GroupBox>
 

@@ -4,8 +4,6 @@
     xmlns:local="clr-namespace:CmdControl.Custom">
 
     <Style TargetType="{x:Type local:UTabItem}">
-        <Setter Property="Header"
-                    Value="{Binding Name}" />
         <Setter Property="FocusVisualStyle"
                     Value="{x:Null}" />
         <Setter Property="Foreground"
