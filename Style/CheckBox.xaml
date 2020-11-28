@@ -19,12 +19,16 @@
                                    Foreground="{Binding Foreground,RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="Center" Margin="2,-1,0,0"/>
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="CheckBoxRectangle" Property="Fill" Value="#885EBDD3"/>
+                            <Setter TargetName="CheckBoxRectangle" Property="Opacity" Value="1"/>
+                        </Trigger>
                         <Trigger Property="IsChecked" Value="true">
                             <Setter TargetName="CheckBoxRectangle" Property="Fill" Value="#FF5EBDD3"/>
                             <Setter TargetName="CheckBoxRectangle" Property="Opacity" Value="1"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="false">
-                            <Setter TargetName="CheckBoxRectangle" Property="Fill" Value="#225EBDD3"/>
+                            <Setter TargetName="CheckBoxRectangle" Property="Fill" Value="#555EBDD3"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

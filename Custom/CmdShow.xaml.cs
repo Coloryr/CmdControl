@@ -20,6 +20,7 @@ namespace CmdControl.Custom
     /// </summary>
     public partial class CmdShow : UserControl
     {
+
         public CmdShow()
         {
             InitializeComponent();

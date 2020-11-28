@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CmdControl.Objs;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,6 @@ namespace CmdControl
     /// </summary>
     public partial class App : Application
     {
+        public static ConfigObj Config;
     }
 }

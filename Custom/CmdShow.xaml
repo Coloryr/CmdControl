@@ -8,14 +8,26 @@
              d:DesignHeight="553" d:DesignWidth="855">
     <Grid>
         <Rectangle Fill="#FFF4F4F5" Stroke="#FF5ABED6" StrokeThickness="2"/>
-        <GroupBox Header="日志" Margin="4,4,4,100">
-            <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
-                <ScrollViewer Style="{StaticResource ScrollViewer}">
-                    <TextBlock Text="TextBlock" TextWrapping="Wrap" Margin="0,0,-843,-424"/>
-                </ScrollViewer>
-                <Button Content="清空" Margin="0,-25,-767,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60"/>
-                <Button Content="保存" Margin="0,-25,-697,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60"/>
+        <GroupBox Header="日志" Margin="4,4,4,69">
+            <Grid>
+                <TextBox Text="" TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Visible" Margin="-1,-1,-1,-1"/>
+                <Button Content="清空" Margin="0,-25,1,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60"/>
+                <Button Content="保存" Margin="0,-25,66,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60"/>
 
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="操作" Margin="4,489,4,4">
+            <Grid>
+                <Button Content="启动" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="10,4,0,0"/>
+                <Button Content="关闭" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="95,4,0,0"/>
+                <Button Content="重启" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="180,4,0,0"/>
+                <Button Content="编辑" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="265,4,0,0"/>
+                <Button Content="删除" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="350,4,0,0"/>
+                <CheckBox Content="自动重启" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="445,5,0,0" Style="{DynamicResource Check}"/>
+                <CheckBox Content="远程控制" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="545,5,0,0" Style="{DynamicResource Check}"/>
+                <CheckBox Content="启动反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="645,5,0,0" Style="{DynamicResource Check}"/>
+                <CheckBox Content="崩溃反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="745,5,0,0" Style="{DynamicResource Check}"/>
             </Grid>
         </GroupBox>
 

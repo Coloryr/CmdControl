@@ -5,7 +5,7 @@
             <Setter.Value>
                 <ControlTemplate>
                     <!--下拉按钮内部背景色-->
-                    <Border x:Name="Back" Background="#44898989" BorderThickness="1" BorderBrush="Transparent">
+                    <Border x:Name="Back" Background="#22898989" BorderThickness="1" BorderBrush="Transparent">
                         <!--下拉按钮内边框-->
                         <Path Name="PathFill" Fill="#CC5EBDD3"  Width="10" Height="6" StrokeThickness="0" Data="M5,0 L10,10 L0,10 z" RenderTransformOrigin="0.5,0.5" Stretch="Fill">
                             <Path.RenderTransform>
@@ -108,7 +108,7 @@
                             <ColumnDefinition Width="0.3*" MaxWidth="30"/>
                         </Grid.ColumnDefinitions>
                         <!--文字区域背景和边线样式-->
-                        <Rectangle Fill="#44898989" />
+                        <Rectangle Fill="#22898989" />
                         <TextBox Background="Transparent" VerticalAlignment="Center"
                                  Grid.Column="0" Foreground="#FFFFFFFF" BorderBrush="#5EBDD300" BorderThickness="0" 
                                  IsReadOnly="{TemplateBinding IsReadOnly}" Text="{TemplateBinding Text}"></TextBox>
