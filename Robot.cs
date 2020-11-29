@@ -344,7 +344,7 @@ namespace CmdControl
         private delegate void RobotCall(byte packid, string data);
         private RobotCall RobotCallEvent;
         private RobotConfig Config;
-        public Robot(RobotConfig config)
+        public void Set(RobotConfig config)
         {
             Config = config;
             RobotCallEvent = new RobotCall(config.action);

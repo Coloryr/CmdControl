@@ -31,8 +31,7 @@
             IsChecked="{Binding CmdData.启动反馈}"/>
         <CheckBox Content="关闭反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="274,167,0,0" Style="{DynamicResource Check}"
             IsChecked="{Binding CmdData.关闭反馈}"/>
-        <Button Content="检查" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,186,0,0" Width="60" Click="Check_Click"/>
-        <Button Content="清空" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="71,186,0,0" Width="60" Click="Clear_Click"/>
-        <Button Content="保存" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="136,186,0,0" Width="60" Click="save_Click"/>
+        <Button Content="清空" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,186,0,0" Width="60" Click="Clear_Click"/>
+        <Button Content="保存" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="71,186,0,0" Width="60" Click="save_Click"/>
     </Grid>
 </Window>

@@ -2,7 +2,6 @@
 using CmdControl.Objs;
 using System;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -77,7 +76,9 @@ namespace CmdControl
             var item = new CmdData
             {
                 名字 = "新建实例",
-                路径 = RunLocal.Text
+                路径 = RunLocal.Text,
+                命令 = RunCommand.Text,
+                参数 = RunArg.Text
             };
             var temp = new CmdItem(item);
             App.Add(temp);
@@ -96,17 +97,28 @@ namespace CmdControl
         {
             if (state)
             {
-                App.Robot.Stop();
+                App.RobotStop();
             }
             else
             {
-                App.Robot.Start();
+                App.RobotStart();
             }
         }
 
         private void NewCmd_Click(object sender, RoutedEventArgs e)
         {
-
+            var item = new CmdData
+            {
+                名字 = "新建实例",
+                路径 = RunLocal.Text,
+                命令 = RunCommand.Text,
+                参数 = RunArg.Text
+            };
+            item = new EditWindow(item).Edit();
+            var temp = new CmdItem(item);
+            App.Add(temp);
+            Clear_Click(null, null);
+            App.ShowA("添加实例", "已添加实例");
         }
     }
 }

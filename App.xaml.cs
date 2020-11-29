@@ -30,8 +30,8 @@ namespace CmdControl
         }
 
         private static void Call(byte packid, string data)
-        { 
-            
+        {
+
         }
         private void NotifyIcon_Click(object sender, EventArgs e)
         {
@@ -67,7 +67,21 @@ namespace CmdControl
                     自动连接 = false
                 }
             });
-            
+
+            RobotConfig = new()
+            {
+                name = "CmdControl",
+                check = true,
+                groups = new() { Config.机器人设置.运行群号 },
+                runqq = Config.机器人设置.机器人号,
+                pack = new() { 49, 50, 51 },
+                time = 10000,
+                ip = Config.机器人连接.地址,
+                port = Config.机器人连接.端口,
+                action = Call
+            };
+            Robot = new();
+
             Task.Run(() =>
             {
                 Thread.Sleep(2000);
@@ -86,25 +100,16 @@ namespace CmdControl
                 ShowB("机器人连接", "参数为空，机器人连接失败");
                 return;
             }
-            RobotConfig = new()
-            {
-                name = "CmdControl",
-                check = true,
-                groups = new() { Config.机器人设置.运行群号 },
-                runqq = Config.机器人设置.机器人号,
-                pack = new() { 49, 50, 51 },
-                time = 10000,
-                ip = Config.机器人连接.地址,
-                port = Config.机器人连接.端口,
-                action = Call
-            };
-            Robot = new(RobotConfig);
+            Robot.Set(RobotConfig);
             Robot.Start();
         }
 
         public static void RobotStop()
         {
-
+            if (Robot.IsRun)
+            {
+                Robot.Stop();
+            }
         }
 
         public static void Remove(CmdItem data)
@@ -145,8 +150,8 @@ namespace CmdControl
         public static void SendMessage(string data)
         {
             if (Robot.IsConnect)
-            { 
-                
+            {
+                Robot.SendGroupMessage(0, Config.机器人设置.运行群号, new() { data });
             }
         }
     }
