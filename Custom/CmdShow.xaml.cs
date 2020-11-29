@@ -25,9 +25,12 @@ namespace CmdControl.Custom
 
         public void AddLog(string data)
         {
-            Log.Text += data + "\n";
-            if (Log.Text.Length >= 100000)
-                Log.Text = "";
+            Dispatcher.Invoke(() =>
+            {
+                Log.Text += data + "\n";
+                if (Log.Text.Length >= 100000)
+                    Log.Text = "";
+            });
         }
         public void Set(bool run)
         {
@@ -37,7 +40,7 @@ namespace CmdControl.Custom
                 CloseButton.IsEnabled = true;
                 RestartButton.IsEnabled = false;
                 EditButton.IsEnabled = false;
-                DeleteButton.IsEnabled = false;
+                KillButton.IsEnabled = true;
             }
             else
             {
@@ -45,7 +48,7 @@ namespace CmdControl.Custom
                 CloseButton.IsEnabled = false;
                 RestartButton.IsEnabled = true;
                 EditButton.IsEnabled = true;
-                DeleteButton.IsEnabled = true;
+                KillButton.IsEnabled = false;
             }
         }
 
@@ -97,7 +100,7 @@ namespace CmdControl.Custom
 
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
+        private void Kill_Click(object sender, RoutedEventArgs e)
         {
 
         }

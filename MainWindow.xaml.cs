@@ -1,5 +1,10 @@
 ﻿using CmdControl.Custom;
+using CmdControl.Objs;
+using System;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace CmdControl
 {
@@ -14,6 +19,22 @@ namespace CmdControl
             InitializeComponent();
             App.MainWindow_ = this;
             DataContext = App.Config;
+
+            BitmapSource m = (BitmapSource)Icon;
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(m.PixelWidth, m.PixelHeight,
+                PixelFormat.Format32bppPArgb);
+            BitmapData data = bmp.LockBits(
+            new System.Drawing.Rectangle(System.Drawing.Point.Empty, bmp.Size),
+                ImageLockMode.WriteOnly,
+                PixelFormat.Format32bppPArgb);
+
+            m.CopyPixels(Int32Rect.Empty, data.Scan0, data.Height * data.Stride, data.Stride);
+            bmp.UnlockBits(data);
+
+            IntPtr iconHandle = bmp.GetHicon();
+            System.Drawing.Icon icon = System.Drawing.Icon.FromHandle(iconHandle);
+
+            App.notifyIcon.Icon = icon;
         }
 
         public void Remove(UTabItem show)
@@ -48,12 +69,27 @@ namespace CmdControl
 
         private void AddCmd_Click(object sender, RoutedEventArgs e)
         {
-
+            if (string.IsNullOrWhiteSpace(RunLocal.Text))
+            {
+                App.ShowB("快速添加错误", "运行路径为空");
+                return;
+            }
+            var item = new CmdData
+            {
+                名字 = "新建实例",
+                路径 = RunLocal.Text
+            };
+            var temp = new CmdItem(item);
+            App.Add(temp);
+            Clear_Click(null, null);
+            App.ShowA("快速添加", "已添加实例");
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
-
+            RunLocal.Text = "";
+            RunCommand.Text = "";
+            RunArg.Text = "";
         }
 
         private void Robot_Click(object sender, RoutedEventArgs e)
@@ -66,6 +102,11 @@ namespace CmdControl
             {
                 App.Robot.Start();
             }
+        }
+
+        private void NewCmd_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

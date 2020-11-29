@@ -27,8 +27,8 @@
                         Click="Restart_Click" Name="RestartButton"/>
                 <Button Content="编辑" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="265,32,0,0" 
                         Click="Edit_Click" Name="EditButton"/>
-                <Button Content="删除" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="350,32,0,0" 
-                        Click="Delete_Click" Name="DeleteButton"/>
+                <Button Content="强制关闭" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="350,32,0,0" 
+                        Click="Kill_Click" Name="KillButton"/>
                 <CheckBox Content="远程控制" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="440,33,0,0" Style="{DynamicResource Check}"
                           IsChecked="{Binding 远程控制}"/>
                 <CheckBox Content="崩溃重启" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="525,33,0,0" Style="{DynamicResource Check}"

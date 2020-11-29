@@ -23,16 +23,17 @@
                     <GroupBox Header="快速添加实例" Margin="10,119,0,0" Height="187" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
                         <Grid>
                             <Label Content="运行路径" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"/>
-
-                            <Label Content="运行命令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,26,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"
+                                     Name="RunLocal"/>
+                            <Label Content="启动命令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,26,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,31,0,0" Height="42"
-                                     VerticalScrollBarVisibility="Auto"/>
+                                     VerticalScrollBarVisibility="Auto" Name="RunCommand"/>
                             <Label Content="附加参数" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,73,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,78,0,0" Height="42"
-                                     VerticalScrollBarVisibility="Auto"/>
+                                     VerticalScrollBarVisibility="Auto" Name="RunArg"/>
                             <Button Content="添加实例" Margin="5,128,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="AddCmd_Click"/>
                             <Button Content="清空参数" Margin="90,128,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="Clear_Click"/>
+                            <Button Content="高级设定" Margin="175,128,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="NewCmd_Click"/>
 
                         </Grid>
                     </GroupBox>

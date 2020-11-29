@@ -14,11 +14,12 @@ namespace CmdControl
     {
         public static ConfigObj Config { get; set; }
         public static MainWindow MainWindow_;
-        public static Dictionary<string, CmdItem> CmdList = new();
+        public static List<CmdItem> CmdList = new();
         public static App ThisApp;
-        public static Robot Robot;
-        public static RobotConfig RobotConfig;
         public static System.Windows.Forms.NotifyIcon notifyIcon;
+
+        private static Robot Robot;
+        private static RobotConfig RobotConfig;
         public static void ShowA(string title, string data)
         {
             notifyIcon.ShowBalloonTip(300, title, data, System.Windows.Forms.ToolTipIcon.Info);
@@ -28,21 +29,63 @@ namespace CmdControl
             notifyIcon.ShowBalloonTip(300, title, data, System.Windows.Forms.ToolTipIcon.Error);
         }
 
-        private void Call(byte packid, string data)
+        private static void Call(byte packid, string data)
         { 
             
         }
-
+        private void NotifyIcon_Click(object sender, EventArgs e)
+        {
+            MainWindow_?.Activate();
+        }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             ThisApp = this;
+
+            notifyIcon = new();
+            notifyIcon.Visible = true;
+            notifyIcon.BalloonTipText = "CmdControl";
+            notifyIcon.Click += NotifyIcon_Click;
+
             Config = ConfigUtils.Read("/Config.json", new ConfigObj
             {
                 实例列表 = new(),
-                //机器人指令 = new("列表", "启动", "关闭"),
-                //机器人设置 = new(0, 0),
-                //机器人连接 = new("127.0.0.1", 23333, false)
+                机器人指令 = new()
+                {
+                    关闭指令 = "关闭",
+                    列表指令 = "列表",
+                    启动指令 = "启动"
+                },
+                机器人设置 = new()
+                {
+                    机器人号 = 0,
+                    运行群号 = 0
+                },
+                机器人连接 = new()
+                {
+                    地址 = "127.0.0.1",
+                    端口 = 23333,
+                    自动连接 = false
+                }
             });
+            
+            Task.Run(() =>
+            {
+                Thread.Sleep(2000);
+                if (Config.机器人连接.自动连接)
+                {
+                    RobotStart();
+                }
+                Load();
+            });
+        }
+
+        public static void RobotStart()
+        {
+            if (Config.机器人设置.机器人号 == 0 || Config.机器人设置.运行群号 == 0)
+            {
+                ShowB("机器人连接", "参数为空，机器人连接失败");
+                return;
+            }
             RobotConfig = new()
             {
                 name = "CmdControl",
@@ -56,27 +99,17 @@ namespace CmdControl
                 action = Call
             };
             Robot = new(RobotConfig);
-            Task.Run(() =>
-            {
-                Thread.Sleep(2000);
-                if (Config.机器人连接.自动连接)
-                {
-                    Robot.Start();
-                }
-                var data = new CmdData 
-                {
-                     名字 = "测试"
-                };
-                var item = new CmdItem(data);
-                Add(data, item);
-                item.Init();
-                Load();
-            });
+            Robot.Start();
         }
 
-        public static void Remove(string data)
+        public static void RobotStop()
         {
-            if (CmdList.ContainsKey(data))
+
+        }
+
+        public static void Remove(CmdItem data)
+        {
+            if (CmdList.Contains(data))
             {
                 CmdList.Remove(data);
             }
@@ -86,21 +119,35 @@ namespace CmdControl
         {
             foreach (var item in Config.实例列表)
             {
-                CmdList.Add(item.Key, new(item.Value));
+                var temp = new CmdItem(item.Value);
+                CmdList.Add(temp);
+                temp.Init();
             }
+            ShowA("启动", "所有实例已加载");
         }
 
-        public static void Add(CmdData key, CmdItem item)
+        public static void Add(CmdItem item)
         {
-            if (CmdList.ContainsKey(key.名字))
+            if (CmdList.Contains(item))
                 return;
             else
-                CmdList.Add(key.名字, item);
+            {
+                CmdList.Add(item);
+                item.Init();
+            }
         }
 
         public static void Run(Action action)
         {
             ThisApp.Dispatcher.Invoke(action);
+        }
+
+        public static void SendMessage(string data)
+        {
+            if (Robot.IsConnect)
+            { 
+                
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CmdControl
@@ -39,13 +40,21 @@ namespace CmdControl
                 UTabItem.Content = CmdShow;
             });
             App.MainWindow_.Add(UTabItem);
+            Task.Run(() =>
+            {
+                Thread.Sleep(500);
+                if (CmdData.自动启动)
+                {
+                    Start();
+                }
+            });
         }
         private void OnDo(FC type, string data)
         {
             switch (type)
             {
                 case FC.Start:
-
+                    Start();
                     break;
                 case FC.Stop:
 
@@ -60,28 +69,31 @@ namespace CmdControl
         }
 
         private void OnClose(object sender, EventArgs e)
-        { 
-            
+        {
+            CmdShow.Set(false);
+            CmdShow.AddLog("进程关闭:" + e.ToString());
         }
 
         private void OnOutPut(object sender, DataReceivedEventArgs e)
-        { 
-            
+        {
+            CmdShow.AddLog(e.Data);
         }
         private void OnErrorOutPut(object sender, DataReceivedEventArgs e)
         {
-
+            CmdShow.Set(false);
+            CmdShow.AddLog("进程以外关闭:" + e.Data);
         }
 
         public void Remove()
         {
             Process?.Dispose();
             App.MainWindow_.Remove(UTabItem);
-            App.Remove(CmdData.名字);
+            App.Remove(this);
         }
 
         public void Start()
         {
+            CmdShow.Set(true);
             ProcessInfo = new()
             {
 
@@ -91,16 +103,31 @@ namespace CmdControl
             Process.Exited += OnClose;
             Process.OutputDataReceived += OnOutPut;
             Process.ErrorDataReceived += OnErrorOutPut;
+
         }
 
         public async void Stop()
         {
-            if (!string.IsNullOrWhiteSpace(CmdData.关闭指令))
-            { 
-                
+            if (Process?.HasExited == false)
+            {
+                if (!string.IsNullOrWhiteSpace(CmdData.关闭指令))
+                {
+                    StandardInput.WriteLine(CmdData.关闭指令);
+                }
+                Process.Close();
+                await Process.WaitForExitAsync();
+                Process.Dispose();
             }
-            Process.Close();
-            await Process.WaitForExitAsync();
+        }
+
+        public async void Kill()
+        {
+            if (Process?.HasExited == false)
+            {
+                Process.Kill();
+                await Process.WaitForExitAsync();
+                Process.Dispose();
+            }
         }
     }
 }
