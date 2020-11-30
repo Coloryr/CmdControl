@@ -1,11 +1,8 @@
 ﻿using CmdControl.Custom;
 using CmdControl.Objs;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,6 +10,7 @@ namespace CmdControl
 {
     public class CmdItem
     {
+        public string 名字 { get; set; }
         private CmdData CmdData;
         private UTabItem UTabItem;
         private CmdShow CmdShow;
@@ -23,6 +21,7 @@ namespace CmdControl
         public CmdItem(CmdData CmdData)
         {
             this.CmdData = CmdData;
+            名字 = CmdData.名字;
         }
 
         public void Init()
@@ -30,7 +29,7 @@ namespace CmdControl
             App.Run(() =>
             {
                 UTabItem = new()
-                { 
+                {
                     Header = CmdData.名字,
                     ShowColor = "Blue"
                 };

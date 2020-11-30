@@ -57,7 +57,8 @@
                             <Button Content="关闭" Margin="90,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
                             <Button Content="重启" Margin="175,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
                             <Label Content="选择实例" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <ComboBox Width="359" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,5,0,0"/>
+                            <ComboBox Width="359" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,5,0,0" Name="CmdsList"
+                                      DisplayMemberPath="名字" SelectedValuePath="名字"/>
                             <Button Content="启动" Margin="5,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
                             <Button Content="修改" Margin="260,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
                             <Button Content="删除" Margin="345,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>

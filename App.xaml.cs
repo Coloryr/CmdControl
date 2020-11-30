@@ -1,6 +1,7 @@
 ﻿using CmdControl.Objs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,8 +14,9 @@ namespace CmdControl
     public partial class App : Application
     {
         public static ConfigObj Config { get; set; }
+        public static string Local;
         public static MainWindow MainWindow_;
-        public static List<CmdItem> CmdList = new();
+        public static ObservableCollection<CmdItem> CmdList = new();
         public static App ThisApp;
         public static System.Windows.Forms.NotifyIcon notifyIcon;
 
@@ -40,13 +42,14 @@ namespace CmdControl
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             ThisApp = this;
+            Local = AppDomain.CurrentDomain.BaseDirectory;
 
             notifyIcon = new();
             notifyIcon.Visible = true;
             notifyIcon.BalloonTipText = "CmdControl";
             notifyIcon.Click += NotifyIcon_Click;
 
-            Config = ConfigUtils.Read("/Config.json", new ConfigObj
+            Config = ConfigUtils.Read(Local + "/Config.json", new ConfigObj
             {
                 实例列表 = new(),
                 机器人指令 = new()
@@ -124,11 +127,17 @@ namespace CmdControl
         {
             foreach (var item in Config.实例列表)
             {
-                var temp = new CmdItem(item.Value);
+                var temp = new CmdItem(item);
                 CmdList.Add(temp);
                 temp.Init();
             }
             ShowA("启动", "所有实例已加载");
+        }
+
+        public static void New(CmdData data)
+        {
+            Config.实例列表.Add(data);
+
         }
 
         public static void Add(CmdItem item)
@@ -153,6 +162,10 @@ namespace CmdControl
             {
                 Robot.SendGroupMessage(0, Config.机器人设置.运行群号, new() { data });
             }
+        }
+        public static void Save()
+        {
+            ConfigUtils.Write(Config, Local + "/Config.json");
         }
     }
 }

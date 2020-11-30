@@ -6,11 +6,11 @@ namespace CmdControl
 {
     class ConfigUtils
     {
-        public static void Write(object obj, string local)
+        public static async void Write(object obj, string local)
         {
             try
             {
-                File.WriteAllText(local, JsonSerializer.Serialize(obj));
+                await File.WriteAllTextAsync(local, JsonSerializer.Serialize(obj));
             }
             catch (Exception e)
             {

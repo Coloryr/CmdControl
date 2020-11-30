@@ -82,7 +82,8 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="ComboBoxItem">
                                 <Border Name="Back" Background="Transparent" BorderThickness="0,0,0,0" BorderBrush="#335EBDD3">
-                                    <ContentPresenter ContentSource="{Binding Source}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                                    <TextBlock Margin="3 0 3 0" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                               Foreground="Black" Text="{Binding Content.名字,RelativeSource={RelativeSource TemplatedParent}}"/>
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
@@ -110,7 +111,7 @@
                         <!--文字区域背景和边线样式-->
                         <Rectangle Fill="#22898989" />
                         <TextBox Background="Transparent" VerticalAlignment="Center"
-                                 Grid.Column="0" Foreground="#FFFFFFFF" BorderBrush="#5EBDD300" BorderThickness="0" 
+                                 Grid.Column="0" Foreground="Black" BorderBrush="#5EBDD300" BorderThickness="0" 
                                  IsReadOnly="{TemplateBinding IsReadOnly}" Text="{TemplateBinding Text}"></TextBox>
                         <Border  Grid.Column="0" BorderThickness="1" BorderBrush="#CC5EBDD3" CornerRadius="1,0,0,1">
 
@@ -123,11 +124,11 @@
                         <!--弹出popup整体设置-->
                         <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup" Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" >
                             <!--弹出popup边框-->
-                            <Border CornerRadius="1" BorderBrush="#225EBDD3" BorderThickness="1,0,1,1" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
+                            <Border CornerRadius="1" BorderBrush="#CC5EBDD3" BorderThickness="1,0,1,1" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
                                 <!--下拉幕布边界背景设置 MaxHeight="{TemplateBinding MaxDropDownHeight}"-->
                                 <ScrollViewer Margin="0,0,0,0" SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" BorderBrush="#AA5EBDD3" BorderThickness="2">
                                     <!-- StackPanel 用于显示子级，方法是将 IsItemsHost 设置为 True -->
-                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Background="#BB303030" TextBlock.Foreground="#FFFFFFFF"/>
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Background="#FFF4F4F5"/>
                                 </ScrollViewer>
                             </Border>
                         </Popup>

@@ -34,6 +34,7 @@ namespace CmdControl
             System.Drawing.Icon icon = System.Drawing.Icon.FromHandle(iconHandle);
 
             App.notifyIcon.Icon = icon;
+            CmdsList.ItemsSource = App.CmdList;
         }
 
         public void Remove(UTabItem show)
@@ -80,6 +81,7 @@ namespace CmdControl
                 命令 = RunCommand.Text,
                 参数 = RunArg.Text
             };
+            App.New(item);
             var temp = new CmdItem(item);
             App.Add(temp);
             Clear_Click(null, null);
@@ -115,6 +117,7 @@ namespace CmdControl
                 参数 = RunArg.Text
             };
             item = new EditWindow(item).Edit();
+            App.New(item);
             var temp = new CmdItem(item);
             App.Add(temp);
             Clear_Click(null, null);

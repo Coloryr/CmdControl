@@ -3,7 +3,7 @@
 namespace CmdControl.Objs
 {
     public enum FC
-    { 
+    {
         Start, Stop, Restart, Input
     }
     public class Robot
@@ -13,7 +13,7 @@ namespace CmdControl.Objs
         public bool 自动连接 { get; set; }
     }
     public class RobotConfig
-        {
+    {
         public long 运行群号 { get; set; }
         public long 机器人号 { get; set; }
     }
@@ -38,7 +38,7 @@ namespace CmdControl.Objs
     }
     public class ConfigObj
     {
-        public Dictionary<string, CmdData> 实例列表 { get; init; }
+        public List<CmdData> 实例列表 { get; init; }
         public Robot 机器人连接 { get; init; }
         public RobotConfig 机器人设置 { get; init; }
         public CommandObj 机器人指令 { get; init; }

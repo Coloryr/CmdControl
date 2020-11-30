@@ -97,7 +97,8 @@ namespace CmdControl.Custom
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
-
+            CmdData = new EditWindow(CmdData).Edit();
+            App.Save();
         }
 
         private void Kill_Click(object sender, RoutedEventArgs e)
