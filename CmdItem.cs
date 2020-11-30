@@ -123,9 +123,6 @@ namespace CmdControl
                 
                 var ProcessStartInfo = new ProcessStartInfo()
                 {
-                    StandardInputEncoding = Encoding.UTF8,
-                    StandardOutputEncoding = Encoding.UTF8,
-                    StandardErrorEncoding = Encoding.UTF8,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardInput = true,
