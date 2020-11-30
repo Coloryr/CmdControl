@@ -1,7 +1,9 @@
 ﻿using CmdControl.Objs;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Reflection;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -41,6 +43,26 @@ namespace CmdControl
         }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
+            {
+                ProcessStartInfo startInfo = new();
+                startInfo.UseShellExecute = true;
+                startInfo.WorkingDirectory = Environment.CurrentDirectory;
+                startInfo.FileName = Assembly.GetExecutingAssembly().Location;
+                startInfo.Verb = "runas";
+                try
+                {
+                    Process.Start(startInfo);
+                }
+                catch
+                {
+                    return;
+                }
+                Current.Shutdown();
+            }
+
             ThisApp = this;
             Local = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -128,7 +150,7 @@ namespace CmdControl
             foreach (var item in Config.实例列表)
             {
                 var temp = new CmdItem(item);
-                CmdList.Add(temp);
+                ThisApp.Dispatcher.Invoke(() => CmdList.Add(temp));
                 temp.Init();
             }
             ShowA("启动", "所有实例已加载");

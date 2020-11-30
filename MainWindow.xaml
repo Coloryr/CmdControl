@@ -9,7 +9,7 @@
     <Grid>
         <Rectangle Fill="#FFF4F4F5" Stroke="#FF5ABED6" StrokeThickness="2"/>
         <TabControl Margin="2,2,2,2" TabStripPlacement="Left" Style="{DynamicResource TabControl}" Name="TabList">
-            <local:UTabItem Header="Start" ShowColor="Blue">
+            <local:UTabItem Header="开始菜单" ShowColor="Blue">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Height="553" Width="855">
                     <Rectangle Fill="#FFF4F4F5" Stroke="#FF5ABED6" StrokeThickness="2"/>
                     <Label Content="欢迎使用：CmdControl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"
@@ -18,8 +18,8 @@
                     <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="148,84,0,0" Name="RunCount"/>
                     <Label Content="所有的实例：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="225,84,0,0"/>
                     <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="331,84,0,0" x:Name="AllCount"/>
-                    <Label Content="以外关闭重启的实例：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="411,84,0,0"/>
-                    <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="581,84,0,0" x:Name="RebootCount"/>
+                    <Label Content="意外关闭的实例：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="411,84,0,0"/>
+                    <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="581,84,0,0" x:Name="CrashCountShow"/>
                     <GroupBox Header="快速添加实例" Margin="10,119,0,0" Height="187" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
                         <Grid>
                             <Label Content="运行路径" HorizontalAlignment="Left" VerticalAlignment="Top"/>

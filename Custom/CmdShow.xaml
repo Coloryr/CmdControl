@@ -14,6 +14,8 @@
                          VerticalScrollBarVisibility="Visible" Margin="-1,-1,-1,-1"/>
                 <Button Content="清空" Margin="0,-25,1,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" Click="Clear_Click"/>
                 <Button Content="保存" Margin="0,-25,66,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" Click="Save_Click"/>
+                <Button Content="删除实例" Margin="0,-25,131,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="90" Click="Remove_Click"
+                        Name="RemoveButton"/>
 
             </Grid>
         </GroupBox>
@@ -24,7 +26,7 @@
                 <Button Content="关闭" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="95,32,0,0" 
                         Click="Close_Click" Name="CloseButton" IsEnabled="False"/>
                 <Button Content="重启" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="180,32,0,0" 
-                        Click="Restart_Click" Name="RestartButton"/>
+                        Click="Restart_Click" Name="RestartButton" IsEnabled="False"/>
                 <Button Content="编辑" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="265,32,0,0" 
                         Click="Edit_Click" Name="EditButton"/>
                 <Button Content="强制关闭" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="350,32,0,0" 

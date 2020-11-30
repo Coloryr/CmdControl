@@ -13,6 +13,19 @@ namespace CmdControl
     public partial class MainWindow : Window
     {
         private bool state;
+        private int CrashCount_ = 0;
+        public int CrashCount
+        {
+            set
+            {
+                CrashCount_ = value;
+                Dispatcher.Invoke(() => CrashCountShow.Content = CrashCount_);
+            }
+            get
+            {
+                return CrashCount_;
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
@@ -39,12 +52,20 @@ namespace CmdControl
 
         public void Remove(UTabItem show)
         {
-            Dispatcher.Invoke(() => TabList.Items.Remove(show));
+            Dispatcher.Invoke(() =>
+            { 
+                AllCount.Content = App.CmdList.Count; 
+                TabList.Items.Remove(show); 
+            });
         }
 
         public void Add(UTabItem show)
         {
-            Dispatcher.Invoke(() => TabList.Items.Add(show));
+            Dispatcher.Invoke(() =>
+            {
+                AllCount.Content = App.CmdList.Count;
+                TabList.Items.Add(show);
+            });
         }
 
         public void BotSet(bool state)

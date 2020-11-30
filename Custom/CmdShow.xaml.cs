@@ -38,17 +38,19 @@ namespace CmdControl.Custom
             {
                 StartButton.IsEnabled = false;
                 CloseButton.IsEnabled = true;
-                RestartButton.IsEnabled = false;
+                RestartButton.IsEnabled = true;
                 EditButton.IsEnabled = false;
                 KillButton.IsEnabled = true;
+                RemoveButton.IsEnabled = false;
             }
             else
             {
                 StartButton.IsEnabled = true;
                 CloseButton.IsEnabled = false;
-                RestartButton.IsEnabled = true;
+                RestartButton.IsEnabled = false;
                 EditButton.IsEnabled = true;
                 KillButton.IsEnabled = false;
+                RemoveButton.IsEnabled = true;
             }
         }
 
@@ -87,23 +89,29 @@ namespace CmdControl.Custom
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-
+            CallInput.Invoke(FC.Stop);
         }
 
         private void Restart_Click(object sender, RoutedEventArgs e)
         {
-
+            CallInput.Invoke(FC.Restart);
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             CmdData = new EditWindow(CmdData).Edit();
+            CallInput.Invoke(FC.Edit);
             App.Save();
         }
 
         private void Kill_Click(object sender, RoutedEventArgs e)
         {
+            CallInput.Invoke(FC.Kill);
+        }
 
+        private void Remove_Click(object sender, RoutedEventArgs e)
+        {
+            CallInput.Invoke(FC.Remove);
         }
     }
 }
