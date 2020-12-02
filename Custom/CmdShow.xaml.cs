@@ -27,7 +27,8 @@ namespace CmdControl.Custom
         {
             Dispatcher.Invoke(() =>
             {
-                Log.Text += data + "\n";
+                Log.AppendText(data + "\n");
+                Log.ScrollToEnd();
                 if (Log.Text.Length >= 100000)
                     Log.Text = "";
             });
@@ -57,6 +58,12 @@ namespace CmdControl.Custom
         private void Command_Click(object sender, RoutedEventArgs e)
         {
             CallInput.Invoke(FC.Input, Command.Text);
+            Command.Text = "";
+        }
+
+        public void Clear()
+        {
+            Log.Text = "";
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)

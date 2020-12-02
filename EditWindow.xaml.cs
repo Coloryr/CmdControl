@@ -1,4 +1,5 @@
 ﻿using CmdControl.Objs;
+using System.IO;
 using System.Windows;
 
 namespace CmdControl
@@ -40,6 +41,33 @@ namespace CmdControl
         private void save_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Choise_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog1.Title = "选择文件";
+            openFileDialog1.Filter = "文件|*.*";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (!File.Exists(openFileDialog1.FileName))
+                {
+                    App.ShowB("文件选择", "文件不存在");
+                    return;
+                }
+                CmdData.路径 = openFileDialog1.FileName;
+            }
+        }
+
+        private void Dir_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new System.Windows.Forms.FolderBrowserDialog();  
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                CmdData.运行路径 = openFileDialog.SelectedPath;
+            }
         }
     }
 }

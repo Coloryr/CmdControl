@@ -4,7 +4,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CmdControl
@@ -18,12 +17,33 @@ namespace CmdControl
         private CmdShow CmdShow;
         private Process Process;
         private StreamWriter StandardInput;
+        private Thread Thread;
         private bool Run;
 
         public CmdItem(CmdData CmdData)
         {
             this.CmdData = CmdData;
             名字 = CmdData.名字;
+        }
+
+        private void Check()
+        {
+            try
+            {
+                while (Process?.HasExited == false)
+                {
+                    if (Process?.HasExited == true)
+                    {
+                        Stop();
+                        return;
+                    }
+                    Thread.Sleep(100);
+                }
+            }
+            catch
+            {
+                return;
+            }
         }
 
         public void Init()
@@ -50,28 +70,24 @@ namespace CmdControl
                 }
             });
         }
-        private void OnDo(FC type, string data)
+        private async void OnDo(FC type, string data)
         {
-            if (Run)
-                return;
-            Run = true;
             switch (type)
             {
                 case FC.Start:
-                    Start();
+                    await Start();
                     break;
                 case FC.Stop:
-                    Stop();
+                    await Stop();
                     break;
                 case FC.Restart:
-                    Stop();
-                    Start();
+                    await Restart();
                     break;
                 case FC.Input:
                     StandardInput.WriteLine(data);
                     break;
                 case FC.Remove:
-                    Remove();
+                    await Remove();
                     break;
                 case FC.Kill:
                     Kill();
@@ -80,14 +96,21 @@ namespace CmdControl
                     UTabItem.Header = CmdData.名字;
                     break;
             }
-            Run = false;
+        }
+
+        private async Task Restart()
+        {
+            await Stop();
+            await Start();
         }
 
         private void OnClose(object sender, EventArgs e)
         {
-            CmdShow.Set(false);
-            UTabItem.ShowColor = "Blue";
-            CmdShow.AddLog("\n进程关闭");
+            App.Run(() =>
+            {
+                CmdShow.Set(false);
+                UTabItem.ShowColor = "Blue";
+            });
         }
 
         private void OnOutPut(object sender, DataReceivedEventArgs e)
@@ -96,31 +119,33 @@ namespace CmdControl
         }
         private void OnErrorOutPut(object sender, DataReceivedEventArgs e)
         {
-            CmdShow.Set(false);
-            UTabItem.ShowColor = "Red";
-            App.MainWindow_.CrashCount += 1;
-            CmdShow.AddLog("进程以外关闭:" + e.Data);
+            CmdShow.AddLog(e.Data);
         }
 
-        public void Remove()
+        public async Task Remove()
         {
-            Stop();
+            if (Run)
+                return;
+            Run = true;
+            await Stop();
             App.MainWindow_.Remove(UTabItem);
             App.Remove(this);
+            Run = false;
         }
 
-        public async void Start()
+        public async Task Start()
         {
+            if (Run)
+                return;
+            Run = true;
             CmdShow.Set(true);
-
+            CmdShow.Clear();
             try
             {
                 if (Process != null)
                 {
                     Process.Dispose();
                 }
-
-                
                 var ProcessStartInfo = new ProcessStartInfo()
                 {
                     UseShellExecute = false,
@@ -132,12 +157,22 @@ namespace CmdControl
                     Arguments = CmdData.参数,
                     CreateNoWindow = true
                 };
-                Process = new Process();
-                Process.StartInfo = ProcessStartInfo;
-                Process.Exited += OnClose;
+                CmdData.路径 = CmdData.路径.Trim();
+                if (!File.Exists(CmdData.路径))
+                {
+                    CmdShow.AddLog($"文件{CmdData.路径}不存在");
+                    CmdShow.Set(false);
+                    return;
+                }
+                Process = new()
+                {
+                    StartInfo = ProcessStartInfo
+                };
                 Process.OutputDataReceived += OnOutPut;
                 Process.ErrorDataReceived += OnErrorOutPut;
                 Process.Start();
+                Process.BeginOutputReadLine();
+                Process.BeginErrorReadLine();
                 StandardInput = Process.StandardInput;
                 UTabItem.ShowColor = "Lime";
                 await Task.Run(() =>
@@ -152,7 +187,8 @@ namespace CmdControl
                         }
                     }
                 });
-                CmdShow.AddLog("\n进程启动");
+                Thread = new Thread(Check);
+                Thread.Start();
             }
             catch(Exception e)
             {
@@ -160,19 +196,29 @@ namespace CmdControl
                 Process.Dispose();
                 CmdShow.Set(false);
             }
+            Run = false;
         }
 
-        public void Stop()
+        public async Task Stop()
         {
+            if (Run)
+                return;
+            Run = true;
             if (Process?.HasExited == false)
             {
                 if (!string.IsNullOrWhiteSpace(CmdData.关闭指令))
                 {
                     StandardInput.WriteLine(CmdData.关闭指令);
                 }
-                Process.Close();
+                Process.CloseMainWindow();
+                if (Process?.HasExited == false)
+                {
+                    await Process.WaitForExitAsync();
+                }
                 Process.Dispose();
             }
+            OnClose(null, null);
+            Run = false;
         }
 
         public void Kill()
@@ -182,6 +228,8 @@ namespace CmdControl
                 Process.Kill();
                 Process.Dispose();
             }
+            OnClose(null, null);
+            Run = false;
         }
     }
 }

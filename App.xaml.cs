@@ -43,25 +43,25 @@ namespace CmdControl
         }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
-            if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
-            {
-                ProcessStartInfo startInfo = new();
-                startInfo.UseShellExecute = true;
-                startInfo.WorkingDirectory = Environment.CurrentDirectory;
-                startInfo.FileName = Assembly.GetExecutingAssembly().Location;
-                startInfo.Verb = "runas";
-                try
-                {
-                    Process.Start(startInfo);
-                }
-                catch
-                {
-                    return;
-                }
-                Current.Shutdown();
-            }
+            //WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            //WindowsPrincipal principal = new WindowsPrincipal(identity);
+            //if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
+            //{
+            //    ProcessStartInfo startInfo = new();
+            //    startInfo.UseShellExecute = true;
+            //    startInfo.WorkingDirectory = Environment.CurrentDirectory;
+            //    startInfo.FileName = Assembly.GetExecutingAssembly().Location;
+            //    startInfo.Verb = "runas";
+            //    try
+            //    {
+            //        Process.Start(startInfo);
+            //    }
+            //    catch
+            //    {
+            //        return;
+            //    }
+            //    Current.Shutdown();
+            //}
 
             ThisApp = this;
             Local = AppDomain.CurrentDomain.BaseDirectory;
@@ -109,7 +109,7 @@ namespace CmdControl
 
             Task.Run(() =>
             {
-                Thread.Sleep(2000);
+                Thread.Sleep(200);
                 if (Config.机器人连接.自动连接)
                 {
                     RobotStart();
@@ -159,7 +159,6 @@ namespace CmdControl
         public static void New(CmdData data)
         {
             Config.实例列表.Add(data);
-
         }
 
         public static void Add(CmdItem item)

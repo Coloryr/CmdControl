@@ -32,9 +32,11 @@
         <CheckBox Content="关闭反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="274,188,0,0" Style="{DynamicResource Check}"
             IsChecked="{Binding CmdData.关闭反馈}"/>
         <Button Content="清空" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,207,0,0" Width="60" Click="Clear_Click"/>
-        <Button Content="保存" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="71,207,0,0" Width="60" Click="save_Click"/>
+        <Button Content="选择文件" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="71,207,0,0" Width="60" Click="Choise_Click"/>
         <Label Content="运行路径" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,140,0,0"/>
         <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="60,144,0,0" 
                  Text="{Binding CmdData.运行路径}"/>
+        <Button Content="选择路径" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="136,207,0,0" Width="60" Click="Dir_Click"/>
+        <Button Content="保存" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="201,207,0,0" Width="60" Click="save_Click"/>
     </Grid>
 </Window>

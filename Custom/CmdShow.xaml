@@ -40,7 +40,8 @@
                 <CheckBox Content="关闭反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="695,33,0,0" Style="{DynamicResource Check}"
                           IsChecked="{Binding 关闭反馈}"/>
                 <TextBox x:Name="Command" TextWrapping="Wrap" Width="738" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0"/>
-                <Button Content="发送" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="753,5,0,0" Click="Command_Click"/>
+                <Button Content="发送" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="753,5,0,0" Click="Command_Click"
+                        IsDefault="True"/>
             </Grid>
         </GroupBox>
 
