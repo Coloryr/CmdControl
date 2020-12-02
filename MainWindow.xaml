@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CmdControl.Custom"
         mc:Ignorable="d"
-        Title="CmdControl" Height="600" Width="1000" Icon="/Color_yr.ico" WindowStartupLocation="Manual" ResizeMode="CanMinimize">
+        Title="CmdControl" Height="600" Width="1000" Icon="/Color_yr.ico" WindowStartupLocation="Manual" ResizeMode="CanMinimize"
+        Closing ="Window_Closing">
     <Grid>
         <Rectangle Fill="#FFF4F4F5" Stroke="#FF5ABED6" StrokeThickness="2"/>
         <TabControl Margin="2,2,2,2" TabStripPlacement="Left" Style="{DynamicResource TabControl}" Name="TabList">

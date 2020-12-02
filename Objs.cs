@@ -39,7 +39,8 @@ namespace CmdControl.Objs
     public class CmdData : INotifyPropertyChanged
     {
         private CmdData_ CmdData_ = new();
-        public string 名字 {
+        public string 名字
+        {
             set
             {
                 UpdateProperty(ref CmdData_.名字, value);
@@ -49,7 +50,8 @@ namespace CmdControl.Objs
                 return CmdData_.名字;
             }
         }
-        public string 路径 {
+        public string 路径
+        {
             set
             {
                 UpdateProperty(ref CmdData_.路径, value);
@@ -81,7 +83,8 @@ namespace CmdControl.Objs
                 return CmdData_.参数;
             }
         }
-        public string 关闭指令 {
+        public string 关闭指令
+        {
             set
             {
                 UpdateProperty(ref CmdData_.关闭指令, value);
@@ -102,7 +105,8 @@ namespace CmdControl.Objs
                 return CmdData_.自动启动;
             }
         }
-        public bool 远程控制 {
+        public bool 远程控制
+        {
             set
             {
                 UpdateProperty(ref CmdData_.远程控制, value);

@@ -190,7 +190,7 @@ namespace CmdControl
                 Thread = new Thread(Check);
                 Thread.Start();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 CmdShow.AddLog(e.ToString());
                 Process.Dispose();
@@ -219,6 +219,18 @@ namespace CmdControl
             }
             OnClose(null, null);
             Run = false;
+        }
+
+        public bool IsRun()
+        {
+            try
+            {
+                return !Process.HasExited;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void Kill()

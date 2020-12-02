@@ -10,12 +10,18 @@
     <Compile Update="Custom\CmdShow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Custom\MessageShow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="EditWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Custom\CmdShow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Custom\MessageShow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="EditWindow.xaml">

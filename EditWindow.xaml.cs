@@ -63,7 +63,7 @@ namespace CmdControl
 
         private void Dir_Click(object sender, RoutedEventArgs e)
         {
-            var openFileDialog = new System.Windows.Forms.FolderBrowserDialog();  
+            var openFileDialog = new System.Windows.Forms.FolderBrowserDialog();
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 CmdData.运行路径 = openFileDialog.SelectedPath;

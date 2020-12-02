@@ -1,6 +1,7 @@
 ﻿using CmdControl.Custom;
 using CmdControl.Objs;
 using System;
+using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -53,9 +54,9 @@ namespace CmdControl
         public void Remove(UTabItem show)
         {
             Dispatcher.Invoke(() =>
-            { 
-                AllCount.Content = App.CmdList.Count; 
-                TabList.Items.Remove(show); 
+            {
+                AllCount.Content = App.CmdList.Count;
+                TabList.Items.Remove(show);
             });
         }
 
@@ -143,6 +144,11 @@ namespace CmdControl
             App.Add(temp);
             Clear_Click(null, null);
             App.ShowA("添加实例", "已添加实例");
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            App.OnClose(e);
         }
     }
 }
