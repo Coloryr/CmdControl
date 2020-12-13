@@ -16,9 +16,9 @@
                     <Label Content="欢迎使用：CmdControl" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"
                            FontSize="50"/>
                     <Label Content="正在运行的实例：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,84,0,0"/>
-                    <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="148,84,0,0" Name="RunCount"/>
+                    <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="148,84,0,0" Name="RunCountShow"/>
                     <Label Content="所有的实例：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="225,84,0,0"/>
-                    <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="331,84,0,0" x:Name="AllCount"/>
+                    <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="331,84,0,0" x:Name="AllCountShow"/>
                     <Label Content="意外关闭的实例：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="411,84,0,0"/>
                     <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="581,84,0,0" x:Name="CrashCountShow"/>
                     <GroupBox Header="快速添加实例" Margin="10,119,0,0" Height="187" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
@@ -55,14 +55,19 @@
                     </GroupBox>
                     <GroupBox Header="快速操作" Margin="10,411,0,0" Height="95" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
                         <Grid>
-                            <Button Content="关闭" Margin="90,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
-                            <Button Content="重启" Margin="175,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
+                            <Button Content="关闭" Margin="90,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"
+                                    Name="CloseButton" Click="CloseButton_Click" IsEnabled="False"/>
+                            <Button Content="重启" Margin="175,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"
+                                    Name="RestartButton" Click="RestartButton_Click" IsEnabled="False"/>
                             <Label Content="选择实例" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                             <ComboBox Width="359" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,5,0,0" Name="CmdsList"
-                                      DisplayMemberPath="名字" SelectedValuePath="名字"/>
-                            <Button Content="启动" Margin="5,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
-                            <Button Content="修改" Margin="260,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
-                            <Button Content="删除" Margin="345,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
+                                      DisplayMemberPath="名字" SelectedValuePath="名字" SelectionChanged="CmdsList_SelectionChanged"/>
+                            <Button Content="启动" Margin="5,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"
+                                    Name="RunButton" Click="RunButton_Click" IsEnabled="False"/>
+                            <Button Content="修改" Margin="260,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"
+                                    Name="EditButton" Click="EditButton_Click" IsEnabled="False"/>
+                            <Button Content="删除" Margin="345,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"
+                                    Name="DeleteButton" Click="DeleteButton_Click" IsEnabled="False"/>
 
                         </Grid>
                     </GroupBox>
@@ -70,20 +75,20 @@
                         <Grid>
                             <Label Content="列表指令" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                             <Label Content="运行群号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,131,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"
                                      Text="{Binding 机器人指令.列表指令}"/>
 
                             <Label Content="启动指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,32,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,36,0,0"
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,36,0,0"
                                      Text="{Binding 机器人指令.启动指令}"/>
-                            <Button Content="保存" Margin="244,322,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"/>
+                            <Button Content="保存" Margin="289,322,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="Button_Click"/>
                             <Label Content="关闭指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,64,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,68,0,0"
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,68,0,0"
                                      Text="{Binding 机器人指令.关闭指令}"/>
-                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,135,0,0"
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,135,0,0"
                                      Text="{Binding 机器人设置.运行群号}"/>
                             <Label Content="机器人号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,161,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="250" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="74,0,0,0"
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="74,0,0,0"
                                      Text="{Binding 机器人设置.机器人号}"/>
                         </Grid>
                     </GroupBox>

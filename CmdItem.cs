@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 
 namespace CmdControl
 {
-    public class CmdItem
+    public class CmdItem : IDisposable
     {
         public string 名字 { get; set; }
+        public bool ProcessRun { get; private set; }
+        public CmdData CmdData { get; private set; }
 
-        private CmdData CmdData;
-        private UTabItem UTabItem;
         private CmdShow CmdShow;
+        private UTabItem UTabItem;
         private Process Process;
         private StreamWriter StandardInput;
         private Thread Thread;
-        private bool Run;
+        private bool TaskRun;
 
         public CmdItem(CmdData CmdData)
         {
@@ -44,6 +45,11 @@ namespace CmdControl
             {
                 return;
             }
+        }
+
+        public void Edit()
+        {
+            CmdShow.Edit_Click(null, null);
         }
 
         public void Init()
@@ -98,7 +104,7 @@ namespace CmdControl
             }
         }
 
-        private async Task Restart()
+        public async Task Restart()
         {
             await Stop();
             await Start();
@@ -124,21 +130,22 @@ namespace CmdControl
 
         public async Task Remove()
         {
-            if (Run)
+            if (TaskRun)
                 return;
-            Run = true;
+            TaskRun = true;
             await Stop();
             App.MainWindow_.Remove(UTabItem);
             App.Remove(this);
-            Run = false;
+            TaskRun = false;
         }
 
         public async Task Start()
         {
-            if (Run)
+            if (TaskRun)
                 return;
-            Run = true;
+            TaskRun = true;
             CmdShow.Set(true);
+            ProcessRun = true;
             CmdShow.Clear();
             try
             {
@@ -162,6 +169,8 @@ namespace CmdControl
                 {
                     CmdShow.AddLog($"文件{CmdData.路径}不存在");
                     CmdShow.Set(false);
+                    ProcessRun = false;
+                    TaskRun = false;
                     return;
                 }
                 Process = new()
@@ -195,15 +204,18 @@ namespace CmdControl
                 CmdShow.AddLog(e.ToString());
                 Process.Dispose();
                 CmdShow.Set(false);
+                ProcessRun = false;
             }
-            Run = false;
+            App.MainWindow_.RunCount++;
+            App.SendMessage($"实例[{CmdData.名字}]已启动");
+            TaskRun = false;
         }
 
         public async Task Stop()
         {
-            if (Run)
+            if (TaskRun)
                 return;
-            Run = true;
+            TaskRun = true;
             if (Process?.HasExited == false)
             {
                 if (!string.IsNullOrWhiteSpace(CmdData.关闭指令))
@@ -218,19 +230,10 @@ namespace CmdControl
                 Process.Dispose();
             }
             OnClose(null, null);
-            Run = false;
-        }
-
-        public bool IsRun()
-        {
-            try
-            {
-                return !Process.HasExited;
-            }
-            catch
-            {
-                return false;
-            }
+            App.MainWindow_.RunCount--;
+            ProcessRun = false;
+            App.SendMessage($"实例[{CmdData.名字}]已关闭");
+            TaskRun = false;
         }
 
         public void Kill()
@@ -241,7 +244,16 @@ namespace CmdControl
                 Process.Dispose();
             }
             OnClose(null, null);
-            Run = false;
+            App.MainWindow_.RunCount--;
+            ProcessRun = false;
+            App.SendMessage($"实例[{CmdData.名字}]已强制结束");
+            TaskRun = false;
+        }
+
+        public void Dispose()
+        {
+            Kill();
+            StandardInput.Dispose();
         }
     }
 }

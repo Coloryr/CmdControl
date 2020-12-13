@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace CmdControl
@@ -15,6 +16,7 @@ namespace CmdControl
     {
         private bool state;
         private int CrashCount_ = 0;
+        private int RunCount_ = 0;
         public int CrashCount
         {
             set
@@ -25,6 +27,18 @@ namespace CmdControl
             get
             {
                 return CrashCount_;
+            }
+        }
+        public int RunCount
+        {
+            set
+            {
+                RunCount_ = value;
+                Dispatcher.Invoke(() => RunCountShow.Content = RunCount_);
+            }
+            get
+            {
+                return RunCount_;
             }
         }
         public MainWindow()
@@ -55,7 +69,7 @@ namespace CmdControl
         {
             Dispatcher.Invoke(() =>
             {
-                AllCount.Content = App.CmdList.Count;
+                AllCountShow.Content = App.CmdList.Count;
                 TabList.Items.Remove(show);
             });
         }
@@ -64,7 +78,7 @@ namespace CmdControl
         {
             Dispatcher.Invoke(() =>
             {
-                AllCount.Content = App.CmdList.Count;
+                AllCountShow.Content = App.CmdList.Count;
                 TabList.Items.Add(show);
             });
         }
@@ -149,6 +163,97 @@ namespace CmdControl
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             App.OnClose(e);
+        }
+
+        private void CmdsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CmdsList.SelectedItem != null)
+            {
+                CmdItem item = (CmdItem)CmdsList.SelectedItem;
+                if (item.ProcessRun)
+                {
+                    RunButton.IsEnabled = false;
+                    CloseButton.IsEnabled = true;
+                    RestartButton.IsEnabled = true;
+                    EditButton.IsEnabled = false;
+                    DeleteButton.IsEnabled = false;
+                }
+                else
+                {
+                    RunButton.IsEnabled = true;
+                    CloseButton.IsEnabled = false;
+                    RestartButton.IsEnabled = false;
+                    EditButton.IsEnabled = true;
+                    DeleteButton.IsEnabled = true;
+                }
+            }
+            else
+            {
+                RunButton.IsEnabled = false;
+                CloseButton.IsEnabled = false;
+                RestartButton.IsEnabled = false;
+                EditButton.IsEnabled = false;
+                DeleteButton.IsEnabled = false;
+            }
+        }
+
+        private async void RunButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CmdsList.SelectedItem == null)
+            {
+                return;
+            }
+            CmdItem item = (CmdItem)CmdsList.SelectedItem;
+            await item.Start();
+            CmdsList.SelectedItem = null;
+        }
+
+        private async void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CmdsList.SelectedItem == null)
+            {
+                return;
+            }
+            CmdItem item = (CmdItem)CmdsList.SelectedItem;
+            await item.Stop();
+            CmdsList.SelectedItem = null;
+        }
+
+        private async void RestartButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CmdsList.SelectedItem == null)
+            {
+                return;
+            }
+            CmdItem item = (CmdItem)CmdsList.SelectedItem;
+            await item.Restart();
+            CmdsList.SelectedItem = null;
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CmdsList.SelectedItem == null)
+            {
+                return;
+            }
+            CmdItem item = (CmdItem)CmdsList.SelectedItem;
+            item.Edit();
+        }
+
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CmdsList.SelectedItem == null)
+            {
+                return;
+            }
+            CmdItem item = (CmdItem)CmdsList.SelectedItem;
+            await item.Remove();
+            CmdsList.SelectedItem = null;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            App.Save();
         }
     }
 }

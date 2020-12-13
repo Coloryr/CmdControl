@@ -1,6 +1,7 @@
 ﻿using CmdControl.Custom;
 using CmdControl.Objs;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
@@ -132,6 +133,11 @@ namespace CmdControl
             }
             Robot.Set(RobotConfig);
             Robot.Start();
+            Task.Run(() =>
+            {
+                Thread.Sleep(1000);
+                SendMessage("[CmdControl]机器人已连接");
+            });
         }
 
         public static void RobotStop()
@@ -142,11 +148,22 @@ namespace CmdControl
             }
         }
 
+        public static void SendMessage(string data)
+        {
+            if (Robot.IsRun)
+            {
+                Robot.SendGroupMessage(Config.机器人设置.机器人号, 
+                    Config.机器人设置.运行群号, new List<string>() { data });
+            }
+        }
+
         public static void Remove(CmdItem data)
         {
             if (CmdList.Contains(data))
             {
                 CmdList.Remove(data);
+                Config.实例列表.Remove(data.CmdData);
+                Save();
             }
         }
 
@@ -181,14 +198,6 @@ namespace CmdControl
         {
             ThisApp.Dispatcher.Invoke(action);
         }
-
-        public static void SendMessage(string data)
-        {
-            if (Robot.IsConnect)
-            {
-                Robot.SendGroupMessage(0, Config.机器人设置.运行群号, new() { data });
-            }
-        }
         public static void Save()
         {
             ConfigUtils.Write(Config, Local + "/Config.json");
@@ -198,7 +207,7 @@ namespace CmdControl
         {
             foreach (var item in CmdList)
             {
-                if (item.IsRun())
+                if (item.ProcessRun)
                 {
                     var win = new MessageShow()
                     {
@@ -210,7 +219,7 @@ namespace CmdControl
                     {
                         foreach (var item1 in CmdList)
                         {
-                            if (item1.IsRun())
+                            if (item1.ProcessRun)
                             {
                                 item1.Kill();
                             }

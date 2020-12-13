@@ -104,7 +104,7 @@ namespace CmdControl.Custom
             CallInput.Invoke(FC.Restart);
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
+        public void Edit_Click(object sender, RoutedEventArgs e)
         {
             CmdData = new EditWindow(CmdData).Edit();
             CallInput.Invoke(FC.Edit);
