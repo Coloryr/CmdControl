@@ -1,5 +1,6 @@
 ﻿using CmdControl.Custom;
 using CmdControl.Objs;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,7 +38,57 @@ namespace CmdControl
 
         private static void Call(byte packid, string data)
         {
-
+            switch (packid)
+            {
+                case 49:
+                    var pack = JsonConvert.DeserializeObject<GroupMessageEventPack>(data);
+                    string temp = pack.message[^1];
+                    if (temp.StartsWith(Config.机器人指令.启动指令))
+                    {
+                        string name = temp.Remove(0, Config.机器人指令.启动指令.Length);
+                        foreach (var item in CmdList)
+                        {
+                            if (item.CmdData.名字 == name)
+                            {
+                                if (!item.ProcessRun)
+                                {
+                                    ThisApp.Dispatcher.Invoke(() => item.Start());
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    else if (temp.StartsWith(Config.机器人指令.关闭指令))
+                    {
+                        string name = temp.Remove(0, Config.机器人指令.关闭指令.Length);
+                        foreach (var item in CmdList)
+                        {
+                            if (item.CmdData.名字 == name)
+                            {
+                                if (item.ProcessRun)
+                                {
+                                    ThisApp.Dispatcher.Invoke(() => item.Stop());
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    else if (temp.StartsWith(Config.机器人指令.列表指令))
+                    {
+                        string send = "实例列表：";
+                        foreach (var item in CmdList)
+                        {
+                            send += $"\n{item.名字}";
+                        }
+                        SendMessage(send);
+                        return;
+                    }
+                    break;
+                case 50:
+                    break;
+                case 51:
+                    break;
+            }
         }
         private void NotifyIcon_Click(object sender, EventArgs e)
         {
@@ -82,9 +133,9 @@ namespace CmdControl
                 实例列表 = new(),
                 机器人指令 = new()
                 {
-                    关闭指令 = "关闭",
+                    关闭指令 = "关闭：",
                     列表指令 = "列表",
-                    启动指令 = "启动"
+                    启动指令 = "启动："
                 },
                 机器人设置 = new()
                 {
