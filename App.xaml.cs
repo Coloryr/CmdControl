@@ -52,7 +52,7 @@ namespace CmdControl
                             {
                                 if (!item.ProcessRun)
                                 {
-                                    ThisApp.Dispatcher.Invoke(() => item.Start());
+                                    ThisApp.Dispatcher.Invoke(() => item.OnDo( FC.Start));
                                     continue;
                                 }
                             }
@@ -67,7 +67,7 @@ namespace CmdControl
                             {
                                 if (item.ProcessRun)
                                 {
-                                    ThisApp.Dispatcher.Invoke(() => item.Stop());
+                                    ThisApp.Dispatcher.Invoke(() => item.OnDo(FC.Stop));
                                     continue;
                                 }
                             }
@@ -119,6 +119,8 @@ namespace CmdControl
             ThisApp = this;
             Local = AppDomain.CurrentDomain.BaseDirectory;
 
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
@@ -163,6 +165,7 @@ namespace CmdControl
                 action = Call
             };
             Robot = new();
+            Robot.IsFirst = false;
 
             Task.Run(() =>
             {
@@ -232,6 +235,7 @@ namespace CmdControl
         public static void New(CmdData data)
         {
             Config.实例列表.Add(data);
+            Save();
         }
 
         public static void Add(CmdItem item)
@@ -272,7 +276,7 @@ namespace CmdControl
                         {
                             if (item1.ProcessRun)
                             {
-                                item1.Kill();
+                                item1.OnDo(FC.Kill);
                             }
                         }
                     }
@@ -281,6 +285,10 @@ namespace CmdControl
                         e.Cancel = true;
                     }
                 }
+            }
+            if (Robot.IsRun)
+            {
+                Robot.Stop();
             }
         }
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

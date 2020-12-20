@@ -19,6 +19,7 @@ namespace CmdControl
         private Process Process;
         private StreamWriter StandardInput;
         private Thread Thread;
+        private bool User;
         private bool TaskRun;
 
         public CmdItem(CmdData CmdData)
@@ -35,7 +36,7 @@ namespace CmdControl
                 {
                     if (Process?.HasExited == true)
                     {
-                        Stop();
+                        OnDo(FC.Stop);
                         return;
                     }
                     Thread.Sleep(100);
@@ -72,12 +73,13 @@ namespace CmdControl
                 Thread.Sleep(500);
                 if (CmdData.自动启动)
                 {
-                    Start();
+                    App.Run(() => OnDo(FC.Start));
                 }
             });
         }
-        private async void OnDo(FC type, string data)
+        public async void OnDo(FC type, string data = "")
         {
+            User = true;
             switch (type)
             {
                 case FC.Start:
@@ -102,9 +104,10 @@ namespace CmdControl
                     UTabItem.Header = CmdData.名字;
                     break;
             }
+            User = false;
         }
 
-        public async Task Restart()
+        private async Task Restart()
         {
             await Stop();
             await Start();
@@ -115,6 +118,7 @@ namespace CmdControl
             App.Run(() =>
             {
                 CmdShow.Set(false);
+                ProcessRun = false;
                 UTabItem.ShowColor = "Blue";
             });
         }
@@ -128,7 +132,7 @@ namespace CmdControl
             CmdShow.AddLog(e.Data);
         }
 
-        public async Task Remove()
+        private async Task Remove()
         {
             if (TaskRun)
                 return;
@@ -139,7 +143,7 @@ namespace CmdControl
             TaskRun = false;
         }
 
-        public async Task Start()
+        private async Task Start()
         {
             if (TaskRun)
                 return;
@@ -211,7 +215,7 @@ namespace CmdControl
             TaskRun = false;
         }
 
-        public async Task Stop()
+        private async Task Stop()
         {
             if (TaskRun)
                 return;
@@ -231,12 +235,19 @@ namespace CmdControl
             }
             OnClose(null, null);
             App.MainWindow_.RunCount--;
-            ProcessRun = false;
             App.SendMessage($"实例[{CmdData.名字}]已关闭");
+            if (!User && CmdData.自动启动)
+            {
+                await Task.Run(() =>
+                {
+                    Thread.Sleep(100);
+                    OnDo(FC.Start);
+                });
+            }
             TaskRun = false;
         }
 
-        public void Kill()
+        private void Kill()
         {
             if (Process?.HasExited == false)
             {
@@ -245,7 +256,6 @@ namespace CmdControl
             }
             OnClose(null, null);
             App.MainWindow_.RunCount--;
-            ProcessRun = false;
             App.SendMessage($"实例[{CmdData.名字}]已强制结束");
             TaskRun = false;
         }

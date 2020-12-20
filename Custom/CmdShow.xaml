@@ -33,8 +33,8 @@
                         Click="Kill_Click" Name="KillButton"/>
                 <CheckBox Content="远程控制" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="440,33,0,0" Style="{DynamicResource Check}"
                           IsChecked="{Binding 远程控制}"/>
-                <CheckBox Content="崩溃重启" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="525,33,0,0" Style="{DynamicResource Check}"
-                          IsChecked="{Binding 远程控制}"/>
+                <CheckBox Content="自动重启" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="525,33,0,0" Style="{DynamicResource Check}"
+                          IsChecked="{Binding 自动重启}"/>
                 <CheckBox Content="启动反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="610,33,0,0" Style="{DynamicResource Check}"
                           IsChecked="{Binding 启动反馈}"/>
                 <CheckBox Content="关闭反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="695,33,0,0" Style="{DynamicResource Check}"

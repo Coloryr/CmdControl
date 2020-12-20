@@ -263,18 +263,15 @@ namespace CmdControl
     {
         public static void LogError(Exception e)
         {
-            string a = "[错误]" + e.ToString();
-            Console.WriteLine(a);
+            App.ShowB("机器人错误", e.ToString());
         }
         public static void LogError(string a)
         {
-            a = "[错误]" + a;
-            Console.WriteLine(a);
+            App.ShowB("机器人错误", a);
         }
         public static void LogOut(string a)
         {
-            a = "[信息]" + a;
-            Console.WriteLine(a);
+            App.ShowA("机器人信息", a);
         }
     }
     public class RobotConfig
@@ -344,6 +341,8 @@ namespace CmdControl
         private delegate void RobotCall(byte packid, string data);
         private RobotCall RobotCallEvent;
         private RobotConfig Config;
+        public bool IsFirst = true;
+        private int Times = 0;
         public void Set(RobotConfig config)
         {
             Config = config;
@@ -397,6 +396,8 @@ namespace CmdControl
                         if (!IsConnect)
                         {
                             ReConnect();
+                            IsFirst = false;
+                            Times = 0;
                         }
                         else if (Socket.Available > 0)
                         {
@@ -429,12 +430,26 @@ namespace CmdControl
                     }
                     catch (Exception e)
                     {
-                        ServerMain.LogError("机器人连接失败");
-                        ServerMain.LogError(e);
-                        IsConnect = false;
-                        ServerMain.LogError($"机器人{Config.time}毫秒后重连");
-                        Thread.Sleep(Config.time);
-                        ServerMain.LogError("机器人重连中");
+                        if (IsFirst)
+                        {
+                            IsRun = false;
+                            ServerMain.LogError("机器人连接失败");
+                        }
+                        else
+                        {
+                            Times++;
+                            if (Times == 10)
+                            {
+                                IsRun = false;
+                                ServerMain.LogError("重连失败次数过多");
+                            }
+                            ServerMain.LogError("机器人连接失败");
+                            ServerMain.LogError(e);
+                            IsConnect = false;
+                            ServerMain.LogError($"机器人{Config.time}毫秒后重连");
+                            Thread.Sleep(Config.time);
+                            ServerMain.LogError("机器人重连中");
+                        }
                     }
                 }
             });
@@ -445,36 +460,28 @@ namespace CmdControl
         {
             if (Socket != null)
                 Socket.Close();
-            try
+            Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            Socket.Connect(Config.ip, Config.port);
+
+            var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(PackStart) + " ");
+            data[^1] = 0;
+
+            Socket.Send(data);
+
+            while (Socket.Available == 0)
             {
-                Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-                Socket.Connect(Config.ip, Config.port);
-
-                var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(PackStart) + " ");
-                data[^1] = 0;
-
-                Socket.Send(data);
-
-                while (Socket.Available == 0)
-                {
-                    Thread.Sleep(10);
-                }
-
-                data = new byte[Socket.Available];
-                Socket.Receive(data);
-                QQs = JsonConvert.DeserializeObject<List<long>>(Encoding.UTF8.GetString(data));
-
-                QueueRead.Clear();
-                QueueSend.Clear();
-                ServerMain.LogOut("机器人已连接");
-                IsConnect = true;
-                App.MainWindow_.BotSet(IsConnect);
+                Thread.Sleep(10);
             }
-            catch (Exception e)
-            {
-                ServerMain.LogError("机器人连接失败");
-                ServerMain.LogError(e);
-            }
+
+            data = new byte[Socket.Available];
+            Socket.Receive(data);
+            QQs = JsonConvert.DeserializeObject<List<long>>(Encoding.UTF8.GetString(data));
+
+            QueueRead.Clear();
+            QueueSend.Clear();
+            ServerMain.LogOut("机器人已连接");
+            IsConnect = true;
+            App.MainWindow_.BotSet(IsConnect);
         }
         public void CallEvent(long eventid, int dofun, List<object> arg)
         {

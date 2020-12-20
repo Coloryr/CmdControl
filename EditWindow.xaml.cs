@@ -32,7 +32,7 @@ namespace CmdControl
             CmdData.名字 = "";
             CmdData.启动反馈 = false;
             CmdData.命令 = "";
-            CmdData.崩溃重启 = false;
+            CmdData.自动重启 = false;
             CmdData.自动启动 = false;
             CmdData.路径 = "";
             CmdData.远程控制 = false;

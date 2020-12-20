@@ -32,7 +32,7 @@ namespace CmdControl.Objs
         public string 关闭指令;
         public bool 自动启动;
         public bool 远程控制;
-        public bool 崩溃重启;
+        public bool 自动重启;
         public bool 启动反馈;
         public bool 关闭反馈;
     }
@@ -116,15 +116,15 @@ namespace CmdControl.Objs
                 return CmdData_.远程控制;
             }
         }
-        public bool 崩溃重启
+        public bool 自动重启
         {
             set
             {
-                UpdateProperty(ref CmdData_.崩溃重启, value);
+                UpdateProperty(ref CmdData_.自动重启, value);
             }
             get
             {
-                return CmdData_.崩溃重启;
+                return CmdData_.自动重启;
             }
         }
         public bool 启动反馈

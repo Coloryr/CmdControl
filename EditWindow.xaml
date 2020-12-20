@@ -21,12 +21,12 @@
         <Label Content="关闭指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,162,0,0"/>
         <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="60,166,0,0"
                  Text="{Binding CmdData.关闭指令}"/>
-        <CheckBox Content="自动重启" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="6,188,0,0" Style="{DynamicResource Check}"
+        <CheckBox Content="自动启动" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="6,188,0,0" Style="{DynamicResource Check}"
                   IsChecked="{Binding CmdData.自动启动}"/>
         <CheckBox Content="远程控制" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="73,188,0,0" Style="{DynamicResource Check}"
             IsChecked="{Binding CmdData.远程控制}"/>
-        <CheckBox Content="崩溃重启" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="140,188,0,0" Style="{DynamicResource Check}"
-            IsChecked="{Binding CmdData.崩溃重启}"/>
+        <CheckBox Content="自动重启" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="140,188,0,0" Style="{DynamicResource Check}"
+            IsChecked="{Binding CmdData.自动重启}"/>
         <CheckBox Content="启动反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="207,188,0,0" Style="{DynamicResource Check}"
             IsChecked="{Binding CmdData.启动反馈}"/>
         <CheckBox Content="关闭反馈" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="274,188,0,0" Style="{DynamicResource Check}"

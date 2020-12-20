@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Text.Json;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace CmdControl
 {
@@ -10,7 +11,7 @@ namespace CmdControl
         {
             try
             {
-                await File.WriteAllTextAsync(local, JsonSerializer.Serialize(obj));
+                await File.WriteAllTextAsync(local, JsonConvert.SerializeObject(obj, Formatting.Indented), Encoding.UTF8);
             }
             catch (Exception e)
             {
@@ -24,12 +25,12 @@ namespace CmdControl
             {
                 if (!File.Exists(local))
                 {
-                    File.WriteAllText(local, JsonSerializer.Serialize(obj));
+                    File.WriteAllText(local, JsonConvert.SerializeObject(obj, Formatting.Indented));
                     return obj;
                 }
                 else
                 {
-                    return JsonSerializer.Deserialize<T>(File.ReadAllText(local));
+                    return JsonConvert.DeserializeObject<T>(File.ReadAllText(local, Encoding.UTF8));
                 }
             }
             catch (Exception e)

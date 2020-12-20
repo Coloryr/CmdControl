@@ -197,36 +197,36 @@ namespace CmdControl
             }
         }
 
-        private async void RunButton_Click(object sender, RoutedEventArgs e)
+        private void RunButton_Click(object sender, RoutedEventArgs e)
         {
             if (CmdsList.SelectedItem == null)
             {
                 return;
             }
             CmdItem item = (CmdItem)CmdsList.SelectedItem;
-            await item.Start();
+            item.OnDo(FC.Start);
             CmdsList.SelectedItem = null;
         }
 
-        private async void CloseButton_Click(object sender, RoutedEventArgs e)
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             if (CmdsList.SelectedItem == null)
             {
                 return;
             }
             CmdItem item = (CmdItem)CmdsList.SelectedItem;
-            await item.Stop();
+            item.OnDo(FC.Stop);
             CmdsList.SelectedItem = null;
         }
 
-        private async void RestartButton_Click(object sender, RoutedEventArgs e)
+        private void RestartButton_Click(object sender, RoutedEventArgs e)
         {
             if (CmdsList.SelectedItem == null)
             {
                 return;
             }
             CmdItem item = (CmdItem)CmdsList.SelectedItem;
-            await item.Restart();
+            item.OnDo(FC.Restart);
             CmdsList.SelectedItem = null;
         }
 
@@ -240,14 +240,14 @@ namespace CmdControl
             item.Edit();
         }
 
-        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (CmdsList.SelectedItem == null)
             {
                 return;
             }
             CmdItem item = (CmdItem)CmdsList.SelectedItem;
-            await item.Remove();
+            item.OnDo(FC.Remove);
             CmdsList.SelectedItem = null;
         }
 
