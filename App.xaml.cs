@@ -208,7 +208,13 @@ namespace CmdControl
                 {
                     RobotStart();
                 }
-                Load();
+                foreach (var item in Config.实例列表)
+                {
+                    var temp = new CmdItem(item);
+                    ThisApp.Dispatcher.Invoke(() => CmdList.Add(temp));
+                    temp.Init();
+                }
+                ShowA("启动", "所有实例已加载");
             });
         }
 
@@ -258,7 +264,7 @@ namespace CmdControl
         {
             if (Robot.IsRun)
             {
-                Robot.SendGroupMessage(Config.机器人设置.机器人号, 
+                Robot.SendGroupMessage(Config.机器人设置.机器人号,
                     Config.机器人设置.运行群号, new List<string>() { data });
             }
         }
@@ -271,17 +277,6 @@ namespace CmdControl
                 Config.实例列表.Remove(data.CmdData);
                 Save();
             }
-        }
-
-        public static void Load()
-        {
-            foreach (var item in Config.实例列表)
-            {
-                var temp = new CmdItem(item);
-                ThisApp.Dispatcher.Invoke(() => CmdList.Add(temp));
-                temp.Init();
-            }
-            ShowA("启动", "所有实例已加载");
         }
 
         public static void New(CmdData data)

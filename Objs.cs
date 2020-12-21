@@ -8,9 +8,7 @@ namespace CmdControl.Objs
     public enum FC
     {
         Start, Stop, Restart, Input,
-        Kill,
-        Remove,
-        Edit
+        Kill, Remove, Edit
     }
     public class Robot
     {
