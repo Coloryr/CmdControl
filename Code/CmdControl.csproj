@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>build_out\</OutputPath>
+    <OutputPath>..\build_out\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
