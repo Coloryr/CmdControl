@@ -45,31 +45,39 @@ namespace CmdControl
                     string temp = pack.message[^1];
                     if (temp.StartsWith(Config.机器人指令.启动指令))
                     {
+                        if (!Config.机器人设置.管理员账户.Contains(pack.fid))
+                        {
+                            return;
+                        }
                         string name = temp.Remove(0, Config.机器人指令.启动指令.Length);
                         foreach (var item in CmdList)
                         {
-                            if (item.CmdData.名字 == name)
+                            if (item.CmdData.名字 == name && !item.ProcessRun)
                             {
-                                if (!item.ProcessRun)
-                                {
-                                    ThisApp.Dispatcher.Invoke(() => item.OnDo( FC.Start));
-                                    continue;
-                                }
+                                if (item.CmdData.远程控制)
+                                    item.OnDo(FC.Start);
+                                else
+                                    SendMessage("该实例不允许远程控制");
+                                continue;
                             }
                         }
                     }
                     else if (temp.StartsWith(Config.机器人指令.关闭指令))
                     {
+                        if (!Config.机器人设置.管理员账户.Contains(pack.fid))
+                        {
+                            return;
+                        }
                         string name = temp.Remove(0, Config.机器人指令.关闭指令.Length);
                         foreach (var item in CmdList)
                         {
-                            if (item.CmdData.名字 == name)
+                            if (item.CmdData.名字 == name && item.ProcessRun)
                             {
-                                if (item.ProcessRun)
-                                {
-                                    ThisApp.Dispatcher.Invoke(() => item.OnDo(FC.Stop));
-                                    continue;
-                                }
+                                if (item.CmdData.远程控制)
+                                    item.OnDo(FC.Stop);
+                                else
+                                    SendMessage("该实例不允许远程控制");
+                                continue;
                             }
                         }
                     }
@@ -78,10 +86,23 @@ namespace CmdControl
                         string send = "实例列表：";
                         foreach (var item in CmdList)
                         {
-                            send += $"\n{item.名字}";
+                            string state = item.ProcessRun ? "运行" : "关闭";
+                            send += $"\n{item.名字}，当前状态：{state}";
                         }
                         SendMessage(send);
                         return;
+                    }
+                    else if (temp.StartsWith(Config.机器人指令.信息指令))
+                    {
+                        string name = temp.Remove(0, Config.机器人指令.启动指令.Length);
+                        foreach (var item in CmdList)
+                        {
+                            if (item.CmdData.名字 == name)
+                            {
+                                SendMessage(item.ToString());
+                                continue;
+                            }
+                        }
                     }
                     break;
                 case 50:
@@ -90,6 +111,23 @@ namespace CmdControl
                     break;
             }
         }
+        private static void LogEvent(LogType type, string data)
+        {
+
+        }
+        private static void StateEvent(StateType type)
+        {
+            switch (type)
+            {
+                case StateType.Connect:
+                    MainWindow_.BotSet(true);
+                    break;
+                case StateType.Disconnect:
+
+                    break;
+            }
+        }
+
         private void NotifyIcon_Click(object sender, EventArgs e)
         {
             MainWindow_?.Activate();
@@ -137,12 +175,14 @@ namespace CmdControl
                 {
                     关闭指令 = "关闭：",
                     列表指令 = "列表",
-                    启动指令 = "启动："
+                    启动指令 = "启动：",
+                    信息指令 = "信息："
                 },
                 机器人设置 = new()
                 {
                     机器人号 = 0,
-                    运行群号 = 0
+                    运行群号 = 0,
+                    管理员账户 = new()
                 },
                 机器人连接 = new()
                 {
@@ -152,18 +192,12 @@ namespace CmdControl
                 }
             });
 
-            RobotConfig = new()
+            if (Config.机器人设置.管理员账户 == null)
             {
-                name = "CmdControl",
-                check = true,
-                groups = new() { Config.机器人设置.运行群号 },
-                runqq = Config.机器人设置.机器人号,
-                pack = new() { 49, 50, 51 },
-                time = 10000,
-                ip = Config.机器人连接.地址,
-                port = Config.机器人连接.端口,
-                action = Call
-            };
+                Config.机器人设置.管理员账户 = new();
+                Save();
+            }
+
             Robot = new();
             Robot.IsFirst = false;
 
@@ -180,11 +214,29 @@ namespace CmdControl
 
         public static void RobotStart()
         {
+            if (Robot.IsRun)
+            {
+                Robot.Stop();
+            }
             if (Config.机器人设置.机器人号 == 0 || Config.机器人设置.运行群号 == 0)
             {
                 ShowB("机器人连接", "参数为空，机器人连接失败");
                 return;
             }
+            RobotConfig = new()
+            {
+                Name = "CmdControl",
+                Check = true,
+                Groups = new() { Config.机器人设置.运行群号 },
+                RunQQ = Config.机器人设置.机器人号,
+                Pack = new() { 49, 50, 51 },
+                Time = 10000,
+                IP = Config.机器人连接.地址,
+                Port = Config.机器人连接.端口,
+                CallAction = Call,
+                LogAction = LogEvent,
+                StateAction = StateEvent
+            };
             Robot.Set(RobotConfig);
             Robot.Start();
             Task.Run(() =>

@@ -63,6 +63,8 @@ namespace CmdControl
 
             App.notifyIcon.Icon = icon;
             CmdsList.ItemsSource = App.CmdList;
+
+            AdminList.ItemsSource = App.Config.机器人设置.管理员账户;
         }
 
         public void Remove(UTabItem show)
@@ -126,6 +128,7 @@ namespace CmdControl
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
+            RunApp.Text = "";
             RunLocal.Text = "";
             RunCommand.Text = "";
             RunArg.Text = "";
@@ -135,10 +138,12 @@ namespace CmdControl
         {
             if (state)
             {
+                BotSet(false);
                 App.RobotStop();
             }
             else
             {
+                BotSet(true);
                 App.RobotStart();
             }
         }
@@ -148,9 +153,10 @@ namespace CmdControl
             var item = new CmdData
             {
                 名字 = "新建实例",
-                路径 = RunLocal.Text,
+                路径 = RunApp.Text,
                 命令 = RunCommand.Text,
-                参数 = RunArg.Text
+                参数 = RunArg.Text,
+                运行路径 = RunLocal.Text
             };
             item = new EditWindow(item).Edit();
             App.New(item);
@@ -253,6 +259,62 @@ namespace CmdControl
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            App.Save();
+        }
+
+        private void AddShow(object sender, RoutedEventArgs e)
+        {
+            string data = new InputWindow("添加QQ号").Set();
+            if (long.TryParse(data, out long temp))
+            {
+                if (App.Config.机器人设置.管理员账户.Contains(temp))
+                {
+                    App.ShowB("输入错误", "QQ号重复");
+                }
+                else
+                {
+                    App.Config.机器人设置.管理员账户.Add(temp);
+                    App.ShowA("添加QQ号", "已添加");
+                    App.Save();
+                }
+            }
+            else
+            {
+                App.ShowB("输入错误", "你输入的不为QQ号");
+            }
+        }
+        private void ChangeShow(object sender, RoutedEventArgs e)
+        {
+            if (AdminList.SelectedItem == null)
+            {
+                return;
+            }
+            long old = (long)AdminList.SelectedItem;
+            string data = new InputWindow("设置QQ号", old.ToString()).Set();
+            if (long.TryParse(data, out long temp))
+            {
+                if (temp != old)
+                {
+                    App.Config.机器人设置.管理员账户.Remove(old);
+                    App.Config.机器人设置.管理员账户.Add(temp);
+                    App.ShowA("修改QQ号", "已修改");
+                    App.Save();
+                }
+            }
+            else
+            {
+                App.ShowB("输入错误", "你输入的不为QQ号");
+            }
+        }
+        private void DeleteShow(object sender, RoutedEventArgs e)
+        {
+            if (AdminList.SelectedItem == null)
+            {
+                return;
+            }
+            long old = (long)AdminList.SelectedItem;
+            App.Config.机器人设置.管理员账户.Remove(old);
+            App.ShowA("删除QQ号", "已删除");
             App.Save();
         }
     }

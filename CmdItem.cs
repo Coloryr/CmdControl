@@ -28,6 +28,11 @@ namespace CmdControl
             名字 = CmdData.名字;
         }
 
+        public override string ToString()
+        {
+            return $"实例名字:{CmdData.名字}\n运行应用:{CmdData.路径}\n运行路径:{CmdData.运行路径}\n运行参数:{CmdData.参数}\n运行命令:{CmdData.命令}\n关闭指令:{CmdData.关闭指令}\n自动启动:{CmdData.自动启动}\n远程控制:{CmdData.远程控制}\n自动重启:{CmdData.自动重启}\n启动反馈:{CmdData.启动反馈}\n关闭反馈:{CmdData.关闭反馈}";
+        }
+
         private void Check()
         {
             try
@@ -77,34 +82,37 @@ namespace CmdControl
                 }
             });
         }
-        public async void OnDo(FC type, string data = "")
+        public void OnDo(FC type, string data = "")
         {
-            User = true;
-            switch (type)
+            App.Run(async () =>
             {
-                case FC.Start:
-                    await Start();
-                    break;
-                case FC.Stop:
-                    await Stop();
-                    break;
-                case FC.Restart:
-                    await Restart();
-                    break;
-                case FC.Input:
-                    StandardInput.WriteLine(data);
-                    break;
-                case FC.Remove:
-                    await Remove();
-                    break;
-                case FC.Kill:
-                    Kill();
-                    break;
-                case FC.Edit:
-                    UTabItem.Header = CmdData.名字;
-                    break;
-            }
-            User = false;
+                User = true;
+                switch (type)
+                {
+                    case FC.Start:
+                        await Start();
+                        break;
+                    case FC.Stop:
+                        await Stop();
+                        break;
+                    case FC.Restart:
+                        await Restart();
+                        break;
+                    case FC.Input:
+                        StandardInput.WriteLine(data);
+                        break;
+                    case FC.Remove:
+                        await Remove();
+                        break;
+                    case FC.Kill:
+                        Kill();
+                        break;
+                    case FC.Edit:
+                        UTabItem.Header = CmdData.名字;
+                        break;
+                }
+                User = false;
+            });
         }
 
         private async Task Restart()
@@ -211,7 +219,8 @@ namespace CmdControl
                 ProcessRun = false;
             }
             App.MainWindow_.RunCount++;
-            App.SendMessage($"实例[{CmdData.名字}]已启动");
+            if (CmdData.启动反馈)
+                App.SendMessage($"实例[{CmdData.名字}]已启动");
             TaskRun = false;
         }
 
@@ -235,7 +244,8 @@ namespace CmdControl
             }
             OnClose(null, null);
             App.MainWindow_.RunCount--;
-            App.SendMessage($"实例[{CmdData.名字}]已关闭");
+            if (CmdData.关闭反馈)
+                App.SendMessage($"实例[{CmdData.名字}]已关闭");
             if (!User && CmdData.自动启动)
             {
                 await Task.Run(() =>
@@ -256,7 +266,8 @@ namespace CmdControl
             }
             OnClose(null, null);
             App.MainWindow_.RunCount--;
-            App.SendMessage($"实例[{CmdData.名字}]已强制结束");
+            if (CmdData.关闭反馈)
+                App.SendMessage($"实例[{CmdData.名字}]已强制结束");
             TaskRun = false;
         }
 
@@ -264,6 +275,7 @@ namespace CmdControl
         {
             Kill();
             StandardInput.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

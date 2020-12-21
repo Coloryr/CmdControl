@@ -122,86 +122,10 @@ namespace CmdControl
         public long id { get; set; }
         public string img { get; set; }
     }
-    /// <summary>
-    /// 群全部禁言包
-    /// </summary>
-    class GroupMuteAll : PackBase
-    {
-        public long id { get; set; }
-    }
-    /// <summary>
-    /// 群全部解禁包
-    /// </summary>
-    class GroupUnmuteAll : PackBase
-    {
-        public long id { get; set; }
-    }
-    /// <summary>
-    /// 设置群员名字包
-    /// </summary>
-    class SetGroupMemberCard : PackBase
-    {
-        public long id { get; set; }
-        public long fid { get; set; }
-        public string card { get; set; }
-    }
-    /// <summary>
-    /// 设置群名包
-    /// </summary>
-    class SetGroupName : PackBase
-    {
-        public long id { get; set; }
-        public string name { get; set; }
-    }
-    /// <summary>
-    /// 加好友请求事件包
-    /// </summary>
-    class NewFriendRequestEventPack : PackBase
-    {
-        public long id { get; set; }
-        public long fid { get; set; }
-        public string name { get; set; }
-        public string message { get; set; }
-        public long eventid { get; set; }
-    }
-    /// <summary>
-    /// 事件处理包
-    /// </summary>
-    class EventCallPack : PackBase
-    {
-        public long eventid { get; set; }
-        public int dofun { get; set; }
-        public List<object> arg { get; set; }
-    }
-    /// <summary>
-    /// 撤回消息包
-    /// </summary>
-    class ReCallMessage : PackBase
-    {
-        public long id { get; set; }
-    }
-    /// <summary>
-    /// 加载本地图片发送到群包
-    /// </summary>
-    class LoadFileSendToGroupImagePack : PackBase
-    {
-        public long id { get; set; }
-        public string file { get; set; }
-    }
-    /// <summary>
-    /// 发送群消息之后的事件包
-    /// </summary>
-    class GroupMessagePostSendEventPack : PackBase
-    {
-        public long id { get; set; }
-        public bool res { get; set; }
-        public List<string> message { get; set; }
-        public string error { get; set; }
-    }
     class BuildPack
     {
         /// <summary>
-        /// 构架一个包
+        /// 构建一个包
         /// </summary>
         /// <param name="obj">对象</param>
         /// <param name="index">包ID</param>
@@ -209,7 +133,7 @@ namespace CmdControl
         public static byte[] Build(object obj, byte index)
         {
             byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(obj) + " ");
-            data[data.Length - 1] = index;
+            data[^1] = index;
             return data;
         }
         /// <summary>
@@ -235,7 +159,7 @@ namespace CmdControl
             temp += "qq=" + qq + "&";
             temp += "img=" + img;
             byte[] data = Encoding.UTF8.GetBytes(temp + " ");
-            data[data.Length - 1] = index;
+            data[^1] = index;
             return data;
         }
         /// <summary>
@@ -250,7 +174,7 @@ namespace CmdControl
         {
             string temp = "id=" + id + "&qq=" + qq + "&sound=" + sound;
             byte[] data = Encoding.UTF8.GetBytes(temp + " ");
-            data[data.Length - 1] = index;
+            data[^1] = index;
             return data;
         }
     }
@@ -259,63 +183,64 @@ namespace CmdControl
         public byte index { get; set; }
         public string data { get; set; }
     }
-    class ServerMain
-    {
-        public static void LogError(Exception e)
-        {
-            App.ShowB("机器人错误", e.ToString());
-        }
-        public static void LogError(string a)
-        {
-            App.ShowB("机器人错误", a);
-        }
-        public static void LogOut(string a)
-        {
-            App.ShowA("机器人信息", a);
-        }
-    }
     public class RobotConfig
     {
         /// <summary>
         /// 机器人IP
         /// </summary>
-        public string ip { get; init; }
+        public string IP { get; init; }
         /// <summary>
         /// 机器人端口
         /// </summary>
-        public int port { get; init; }
+        public int Port { get; init; }
         /// <summary>
         /// 监听的包
         /// </summary>
-        public List<byte> pack { get; init; }
+        public List<byte> Pack { get; init; }
         /// <summary>
         /// 插件名字
         /// </summary>
-        public string name { get; init; }
+        public string Name { get; init; }
         /// <summary>
         /// 监听的群，可以为null
         /// </summary>
-        public List<long> groups { get; init; }
+        public List<long> Groups { get; init; }
         /// <summary>
         /// 监听的qq号，可以为null
         /// </summary>
-        public List<long> qqs { get; init; }
+        public List<long> QQs { get; init; }
         /// <summary>
         /// 运行的qq，可以不设置
         /// </summary>
-        public long runqq { get; init; }
+        public long RunQQ { get; init; }
         /// <summary>
         /// 重连时间
         /// </summary>
-        public int time { get; init; }
+        public int Time { get; init; }
         /// <summary>
         /// 检测是否断开
         /// </summary>
-        public bool check { get; init; }
+        public bool Check { get; init; }
         /// <summary>
         /// 机器人事件回调函数
         /// </summary>
-        public Action<byte, string> action { get; init; }
+        public Action<byte, string> CallAction { get; init; }
+        /// <summary>
+        /// 机器人日志回调函数
+        /// </summary>
+        public Action<LogType, string> LogAction { get; init; }
+        /// <summary>
+        /// 机器人状态回调函数
+        /// </summary>
+        public Action<StateType> StateAction { get; init; }
+    }
+    public enum LogType
+    {
+        Log, Error
+    }
+    public enum StateType
+    {
+        Disconnect, Connecting, Connect
     }
     public class Robot
     {
@@ -332,37 +257,58 @@ namespace CmdControl
         /// </summary>
         public bool IsConnect { get; private set; }
 
+        private delegate void RobotCall(byte packid, string data);
+        private delegate void RobotLog(LogType type, string data);
+        private delegate void RobotState(StateType type);
+        private RobotCall RobotCallEvent;
+        private RobotLog RobotLogEvent;
+        private RobotState RobotStateEvent;
+
         private Socket Socket;
         private Thread ReadThread;
         private Thread DoThread;
         private ConcurrentBag<RobotTask> QueueRead;
         private ConcurrentBag<byte[]> QueueSend;
         private PackStart PackStart;
-        private delegate void RobotCall(byte packid, string data);
-        private RobotCall RobotCallEvent;
         private RobotConfig Config;
+
+        /// <summary>
+        /// 第一次连接检查
+        /// </summary>
         public bool IsFirst = true;
+
         private int Times = 0;
-        public void Set(RobotConfig config)
+        /// <summary>
+        /// 设置配置
+        /// </summary>
+        /// <param name="Config">机器人配置</param>
+        public void Set(RobotConfig Config)
         {
-            Config = config;
-            RobotCallEvent = new RobotCall(config.action);
-            PackStart = new PackStart
+            this.Config = Config;
+
+            RobotCallEvent = new(Config.CallAction);
+            RobotLogEvent = new(Config.LogAction);
+            RobotStateEvent = new(Config.StateAction);
+
+            PackStart = new()
             {
-                Name = config.name,
-                Reg = config.pack,
-                Groups = config.groups,
-                QQs = config.qqs,
-                RunQQ = config.runqq
+                Name = Config.Name,
+                Reg = Config.Pack,
+                Groups = Config.Groups,
+                QQs = Config.QQs,
+                RunQQ = Config.RunQQ
             };
         }
+        /// <summary>
+        /// 启动机器人
+        /// </summary>
         public void Start()
         {
             if (ReadThread?.IsAlive == true)
                 return;
-            QueueRead = new ConcurrentBag<RobotTask>();
-            QueueSend = new ConcurrentBag<byte[]>();
-            DoThread = new Thread(() =>
+            QueueRead = new();
+            QueueSend = new();
+            DoThread = new(() =>
             {
                 while (IsRun)
                 {
@@ -376,12 +322,12 @@ namespace CmdControl
                     }
                     catch (Exception e)
                     {
-                        ServerMain.LogError(e);
+                        LogError(e);
                     }
                 }
             });
 
-            ReadThread = new Thread(() =>
+            ReadThread = new(() =>
             {
                 while (!IsRun)
                 {
@@ -398,6 +344,7 @@ namespace CmdControl
                             ReConnect();
                             IsFirst = false;
                             Times = 0;
+                            RobotStateEvent.Invoke(StateType.Connect);
                         }
                         else if (Socket.Available > 0)
                         {
@@ -411,14 +358,14 @@ namespace CmdControl
                                 data = Encoding.UTF8.GetString(data)
                             });
                         }
-                        else if (Config.check && time >= 20)
+                        else if (Config.Check && time >= 20)
                         {
                             time = 0;
                             if (Socket.Poll(1000, SelectMode.SelectRead))
                             {
-                                ServerMain.LogOut("机器人连接中断");
+                                LogOut("机器人连接中断");
                                 IsConnect = false;
-                                App.MainWindow_.BotSet(IsConnect);
+                                RobotStateEvent.Invoke(StateType.Disconnect);
                             }
                         }
                         else if (QueueSend.TryTake(out byte[] Send))
@@ -433,7 +380,7 @@ namespace CmdControl
                         if (IsFirst)
                         {
                             IsRun = false;
-                            ServerMain.LogError("机器人连接失败");
+                            LogError("机器人连接失败");
                         }
                         else
                         {
@@ -441,14 +388,14 @@ namespace CmdControl
                             if (Times == 10)
                             {
                                 IsRun = false;
-                                ServerMain.LogError("重连失败次数过多");
+                                LogError("重连失败次数过多");
                             }
-                            ServerMain.LogError("机器人连接失败");
-                            ServerMain.LogError(e);
+                            LogError("机器人连接失败");
+                            LogError(e);
                             IsConnect = false;
-                            ServerMain.LogError($"机器人{Config.time}毫秒后重连");
-                            Thread.Sleep(Config.time);
-                            ServerMain.LogError("机器人重连中");
+                            LogError($"机器人{Config.Time}毫秒后重连");
+                            Thread.Sleep(Config.Time);
+                            LogError("机器人重连中");
                         }
                     }
                 }
@@ -460,8 +407,11 @@ namespace CmdControl
         {
             if (Socket != null)
                 Socket.Close();
+
+            RobotStateEvent.Invoke(StateType.Connecting);
+
             Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            Socket.Connect(Config.ip, Config.port);
+            Socket.Connect(Config.IP, Config.Port);
 
             var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(PackStart) + " ");
             data[^1] = 0;
@@ -479,14 +429,8 @@ namespace CmdControl
 
             QueueRead.Clear();
             QueueSend.Clear();
-            ServerMain.LogOut("机器人已连接");
+            LogOut("机器人已连接");
             IsConnect = true;
-            App.MainWindow_.BotSet(IsConnect);
-        }
-        public void CallEvent(long eventid, int dofun, List<object> arg)
-        {
-            var data = BuildPack.Build(new EventCallPack { eventid = eventid, dofun = dofun, arg = arg }, 59);
-            QueueSend.Add(data);
         }
         public void SendGroupMessage(long qq, long id, List<string> message)
         {
@@ -518,24 +462,31 @@ namespace CmdControl
             var data = BuildPack.BuildImage(qq, id, 0, img, 63);
             QueueSend.Add(data);
         }
-
-        public void SendGroupSound(long qq, long id, string sound)
+        public void SendStop()
         {
-            var data = BuildPack.BuildSound(qq, id, sound, 74);
-            QueueSend.Add(data);
-        }
-        public void SendGroupImageFile(long qq, long id, string file)
-        {
-            var data = BuildPack.Build(new LoadFileSendToGroupImagePack { qq = qq, id = id, file = file, }, 75);
-            QueueSend.Add(data);
+            var data = BuildPack.Build(new object(), 127);
+            Socket.Send(data);
         }
         public void Stop()
         {
-            ServerMain.LogOut("机器人正在断开");
+            LogOut("机器人正在断开");
             IsRun = false;
+            SendStop();
             if (Socket != null)
                 Socket.Close();
-            ServerMain.LogOut("机器人已断开");
+            LogOut("机器人已断开");
+        }
+        private void LogError(Exception e)
+        {
+            RobotLogEvent.Invoke(LogType.Error, "机器人错误\n" + e.ToString());
+        }
+        private void LogError(string a)
+        {
+            RobotLogEvent.Invoke(LogType.Error, "机器人错误:" + a);
+        }
+        private void LogOut(string a)
+        {
+            RobotLogEvent.Invoke(LogType.Log, a);
         }
     }
 }

@@ -12,9 +12,9 @@
             <Grid>
                 <TextBox TextWrapping="Wrap" Name="Log" IsReadOnly="True"
                          VerticalScrollBarVisibility="Visible" Margin="-1,-1,-1,-1"/>
-                <Button Content="清空" Margin="0,-25,1,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" Click="Clear_Click"/>
-                <Button Content="保存" Margin="0,-25,66,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" Click="Save_Click"/>
-                <Button Content="删除实例" Margin="0,-25,131,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="90" Click="Remove_Click"
+                <Button Content="清空日志" Margin="0,-25,1,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="90" Click="Clear_Click"/>
+                <Button Content="保存日志" Margin="0,-25,96,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="90" Click="Save_Click"/>
+                <Button Content="删除实例" Margin="0,-25,191,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="90" Click="Remove_Click"
                         Name="RemoveButton"/>
 
             </Grid>

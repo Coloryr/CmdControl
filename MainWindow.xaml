@@ -19,26 +19,29 @@
                     <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="148,84,0,0" Name="RunCountShow"/>
                     <Label Content="所有的实例：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="225,84,0,0"/>
                     <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="331,84,0,0" x:Name="AllCountShow"/>
-                    <Label Content="意外关闭的实例：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="411,84,0,0"/>
-                    <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="581,84,0,0" x:Name="CrashCountShow"/>
-                    <GroupBox Header="快速添加实例" Margin="10,119,0,0" Height="187" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
+                    <Label Content="自动重启的次数：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="411,84,0,0"/>
+                    <Label Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="549,84,0,0" x:Name="CrashCountShow"/>
+                    <GroupBox Header="快速添加实例" Margin="10,119,0,0" Height="232" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
                         <Grid>
-                            <Label Content="运行路径" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <Label Content="运行应用" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <Label Content="运行路径" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,119,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"
-                                     Name="RunLocal"/>
+                                     Name="RunApp"/>
                             <Label Content="启动命令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,26,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,31,0,0" Height="42"
                                      VerticalScrollBarVisibility="Auto" Name="RunCommand"/>
                             <Label Content="附加参数" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,73,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,78,0,0" Height="42"
                                      VerticalScrollBarVisibility="Auto" Name="RunArg"/>
-                            <Button Content="添加实例" Margin="5,128,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="AddCmd_Click"/>
-                            <Button Content="清空参数" Margin="90,128,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="Clear_Click"/>
-                            <Button Content="高级设定" Margin="175,128,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="NewCmd_Click"/>
+                            <Button Content="添加实例" Margin="5,172,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="AddCmd_Click"/>
+                            <Button Content="清空参数" Margin="90,172,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="Clear_Click"/>
+                            <Button Content="高级设定" Margin="175,172,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="NewCmd_Click"/>
+                            <TextBox TextWrapping="Wrap" Width="360" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,125,0,0" Height="42"
+                                VerticalScrollBarVisibility="Auto" x:Name="RunLocal"/>
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="机器人连接" Margin="10,311,0,0" Height="95" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
+                    <GroupBox Header="机器人连接" Margin="10,356,0,0" Height="91" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
                         <Grid>
                             <Label Content="连接地址" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                             <TextBox TextWrapping="Wrap" Width="185" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"
@@ -53,7 +56,7 @@
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="快速操作" Margin="10,411,0,0" Height="95" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
+                    <GroupBox Header="快速操作" Margin="10,452,0,0" Height="91" VerticalAlignment="Top" HorizontalAlignment="Left" Width="447">
                         <Grid>
                             <Button Content="关闭" Margin="90,30,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top"
                                     Name="CloseButton" Click="CloseButton_Click" IsEnabled="False"/>
@@ -71,25 +74,43 @@
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="指令设置" Margin="462,119,0,0" Height="387" VerticalAlignment="Top" HorizontalAlignment="Left" Width="383">
+                    <GroupBox Header="指令设置" Margin="462,119,0,0" Height="424" VerticalAlignment="Top" HorizontalAlignment="Left" Width="383">
                         <Grid>
                             <Label Content="列表指令" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <Label Content="运行群号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,131,0,0"/>
+                            <Label Content="运行群号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,120,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"
                                      Text="{Binding 机器人指令.列表指令}"/>
 
-                            <Label Content="启动指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,32,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,36,0,0"
+                            <Label Content="启动指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,30,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,34,0,0"
                                      Text="{Binding 机器人指令.启动指令}"/>
-                            <Button Content="保存" Margin="289,322,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="Button_Click"/>
-                            <Label Content="关闭指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,64,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,68,0,0"
+                            <Button Content="保存" Margin="289,359,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="Button_Click"/>
+                            <Label Content="关闭指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,60,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,64,0,0"
                                      Text="{Binding 机器人指令.关闭指令}"/>
-                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,135,0,0"
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,124,0,0"
                                      Text="{Binding 机器人设置.运行群号}"/>
-                            <Label Content="机器人号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,161,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="74,0,0,0"
+                            <Label Content="机器人号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,150,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,154,0,0"
                                      Text="{Binding 机器人设置.机器人号}"/>
+                            <ListView Margin="6,210,10,0" Height="144" VerticalAlignment="Top" Name="AdminList">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="QQ号" Width="340"/>
+                                    </GridView>
+                                </ListView.View>
+                                <ListView.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="添加" Click="AddShow"/>
+                                        <MenuItem Header="修改" Click="ChangeShow"/>
+                                        <MenuItem Header="删除" Click="DeleteShow"/>
+                                    </ContextMenu>
+                                </ListView.ContextMenu>
+                            </ListView>
+                            <Label Content="信息指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,90,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,94,0,0"
+                                Text="{Binding 机器人指令.信息指令}"/>
+                            <Label Content="管理员账户" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,180,0,0"/>
                         </Grid>
                     </GroupBox>
                 </Grid>

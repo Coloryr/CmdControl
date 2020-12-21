@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -21,6 +22,7 @@ namespace CmdControl.Objs
     {
         public long 运行群号 { get; set; }
         public long 机器人号 { get; set; }
+        public ObservableCollection<long> 管理员账户 { get; set; }
     }
     class CmdData_
     {
@@ -31,10 +33,10 @@ namespace CmdControl.Objs
         public string 运行路径;
         public string 关闭指令;
         public bool 自动启动;
-        public bool 远程控制;
+        public bool 远程控制 = true;
         public bool 自动重启;
-        public bool 启动反馈;
-        public bool 关闭反馈;
+        public bool 启动反馈 = true;
+        public bool 关闭反馈 = true;
     }
     public class CmdData : INotifyPropertyChanged
     {
@@ -187,6 +189,7 @@ namespace CmdControl.Objs
         public string 列表指令 { get; set; }
         public string 启动指令 { get; set; }
         public string 关闭指令 { get; set; }
+        public string 信息指令 { get; set; }
     }
     public class ConfigObj
     {
