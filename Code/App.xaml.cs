@@ -343,7 +343,7 @@ namespace CmdControl
             try
             {
                 e.Handled = true;
-                MessageBox.Show("捕获未处理异常:" + e.Exception.Message);
+                MessageBox.Show("捕获未处理异常:" + e.Exception.ToString());
             }
             catch (Exception ex)
             {
@@ -362,7 +362,7 @@ namespace CmdControl
             sbEx.Append("捕获未处理异常：");
             if (e.ExceptionObject is Exception)
             {
-                sbEx.Append(((Exception)e.ExceptionObject).Message);
+                sbEx.Append(((Exception)e.ExceptionObject).ToString());
             }
             else
             {
@@ -373,7 +373,7 @@ namespace CmdControl
 
         private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            MessageBox.Show("捕获线程内未处理异常：" + e.Exception.Message);
+            MessageBox.Show("捕获线程内未处理异常：" + e.Exception.ToString());
             e.SetObserved();
         }
     }
