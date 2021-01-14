@@ -25,6 +25,7 @@ namespace CmdControl
         public static App ThisApp;
         public static System.Windows.Forms.NotifyIcon notifyIcon;
 
+        private static CmdItem ShowItem;
         private static Robot Robot;
         private static RobotConfig RobotConfig;
         public static void ShowA(string title, string data)
@@ -92,6 +93,24 @@ namespace CmdControl
                         SendMessage(send);
                         return;
                     }
+                    else if (temp.StartsWith(Config.机器人指令.控制指令))
+                    {
+                        if (!Config.机器人设置.管理员账户.Contains(pack.fid))
+                        {
+                            return;
+                        }
+                        string name = temp.Remove(0, Config.机器人指令.控制指令.Length);
+                        foreach (var item in CmdList)
+                        {
+                            if (item.CmdData.名字 == name)
+                            {
+                                ShowItem = item;
+                                item.StartSend();
+                                SendMessage($"开始监控：{item.名字}");
+                                return;
+                            }
+                        }
+                    }
                     else if (temp.StartsWith(Config.机器人指令.信息指令))
                     {
                         string name = temp.Remove(0, Config.机器人指令.启动指令.Length);
@@ -102,6 +121,26 @@ namespace CmdControl
                                 SendMessage(item.ToString());
                                 continue;
                             }
+                        }
+                    }
+                    else if (temp.StartsWith(Config.机器人指令.退出指令))
+                    {
+                        if (ShowItem != null)
+                        {
+                            ShowItem.EndSend();
+                            SendMessage($"退出监控：{ShowItem.名字}");
+                            ShowItem = null;
+                        }
+                    }
+                    else if (ShowItem != null)
+                    {
+                        if (!Config.机器人设置.管理员账户.Contains(pack.fid))
+                        {
+                            return;
+                        }
+                        if (temp.StartsWith("/"))
+                        {
+                            ShowItem.OnDo(FC.Input, temp.Remove(0, 1));
                         }
                     }
                     break;
@@ -176,7 +215,9 @@ namespace CmdControl
                     关闭指令 = "关闭：",
                     列表指令 = "列表",
                     启动指令 = "启动：",
-                    信息指令 = "信息："
+                    信息指令 = "信息：",
+                    控制指令 = "控制：",
+                    退出指令 = "退出"
                 },
                 机器人设置 = new()
                 {

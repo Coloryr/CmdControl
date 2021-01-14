@@ -10,13 +10,13 @@ namespace CmdControl.Objs
         Start, Stop, Restart, Input,
         Kill, Remove, Edit
     }
-    public class Robot
+    public record Robot
     {
         public string 地址 { get; set; }
         public int 端口 { get; set; }
         public bool 自动连接 { get; set; }
     }
-    public class RobotConfig
+    public record RobotConfig
     {
         public long 运行群号 { get; set; }
         public long 机器人号 { get; set; }
@@ -175,21 +175,19 @@ namespace CmdControl.Objs
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-    public class CommandObj
+    public record CommandObj
     {
         public string 列表指令 { get; set; }
         public string 启动指令 { get; set; }
         public string 关闭指令 { get; set; }
         public string 信息指令 { get; set; }
+        public string 控制指令 { get; set; }
+        public string 退出指令 { get; set; }
     }
-    public class ConfigObj
+    public record ConfigObj
     {
         public List<CmdData> 实例列表 { get; init; }
         public Robot 机器人连接 { get; init; }

@@ -21,6 +21,7 @@ namespace CmdControl
         private Thread Thread;
         private bool User;
         private bool TaskRun;
+        private bool Send;
 
         public CmdItem(CmdData CmdData)
         {
@@ -33,13 +34,23 @@ namespace CmdControl
             return $"实例名字:{CmdData.名字}\n运行应用:{CmdData.路径}\n运行路径:{CmdData.运行路径}\n运行参数:{CmdData.参数}\n运行命令:{CmdData.命令}\n关闭指令:{CmdData.关闭指令}\n自动启动:{CmdData.自动启动}\n远程控制:{CmdData.远程控制}\n自动重启:{CmdData.自动重启}\n启动反馈:{CmdData.启动反馈}\n关闭反馈:{CmdData.关闭反馈}";
         }
 
+        public void StartSend()
+        {
+            Send = true;
+        }
+
+        public void EndSend()
+        {
+            Send = false;
+        }
+
         private void Check()
         {
             try
             {
-                while (Process?.HasExited == false)
+                while (Process != null)
                 {
-                    if (Process?.HasExited == true)
+                    if (Process?.HasExited == true || Process == null)
                     {
                         OnDo(FC.Stop);
                         return;
@@ -134,10 +145,18 @@ namespace CmdControl
         private void OnOutPut(object sender, DataReceivedEventArgs e)
         {
             CmdShow.AddLog(e.Data);
+            if (Send)
+            {
+                App.SendMessage(e.Data);
+            }
         }
         private void OnErrorOutPut(object sender, DataReceivedEventArgs e)
         {
             CmdShow.AddLog(e.Data);
+            if (Send)
+            {
+                App.SendMessage(e.Data);
+            }
         }
 
         private async Task Remove()

@@ -77,23 +77,22 @@
                     <GroupBox Header="指令设置" Margin="462,119,0,0" Height="424" VerticalAlignment="Top" HorizontalAlignment="Left" Width="383">
                         <Grid>
                             <Label Content="列表指令" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <Label Content="运行群号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,120,0,0"/>
+                            <Label Content="运行群号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,180,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,4,0,0"
                                      Text="{Binding 机器人指令.列表指令}"/>
 
                             <Label Content="启动指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,30,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,34,0,0"
                                      Text="{Binding 机器人指令.启动指令}"/>
-                            <Button Content="保存" Margin="289,359,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="Button_Click"/>
                             <Label Content="关闭指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,60,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,64,0,0"
                                      Text="{Binding 机器人指令.关闭指令}"/>
-                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,124,0,0"
+                            <TextBox TextWrapping="Wrap" Width="294" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,184,0,0"
                                      Text="{Binding 机器人设置.运行群号}"/>
-                            <Label Content="机器人号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,150,0,0"/>
-                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,154,0,0"
+                            <Label Content="机器人号" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,210,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="294" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,214,0,0"
                                      Text="{Binding 机器人设置.机器人号}"/>
-                            <ListView Margin="6,210,10,0" Height="144" VerticalAlignment="Top" Name="AdminList">
+                            <ListView Margin="6,240,10,0" Height="144" VerticalAlignment="Top" Name="AdminList">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="QQ号" Width="340"/>
@@ -110,9 +109,16 @@
                             <Label Content="信息指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,90,0,0"/>
                             <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,94,0,0"
                                 Text="{Binding 机器人指令.信息指令}"/>
-                            <Label Content="管理员账户" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,180,0,0"/>
+                            <Label Content="管理员账户" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,237,0,0"/>
+                            <Label Content="控制指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,120,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,124,0,0"
+                                Text="{Binding 机器人指令.控制指令}"/>
+                            <Label Content="退出指令" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,150,0,0"/>
+                            <TextBox TextWrapping="Wrap" Width="295" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,154,0,0"
+                                Text="{Binding 机器人指令.退出指令}"/>
                         </Grid>
                     </GroupBox>
+                    <Button Content="保存" Margin="765,89,0,0" Height="25" HorizontalAlignment="Left" Width="80" VerticalAlignment="Top" Click="Button_Click"/>
                 </Grid>
             </local:UTabItem>
         </TabControl>
