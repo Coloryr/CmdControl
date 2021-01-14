@@ -10,6 +10,7 @@ namespace CmdControl
     public partial class EditWindow : Window
     {
         public CmdData CmdData { get; set; }
+        private bool IsRun;
         public EditWindow(CmdData CmdData = null)
         {
             if (CmdData == null)
@@ -17,6 +18,31 @@ namespace CmdControl
             this.CmdData = CmdData;
             InitializeComponent();
             DataContext = this;
+            switch (CmdData.输入编码)
+            {
+                case Coding.ANSI:
+                    A3.IsChecked = true;
+                    break;
+                case Coding.UTF8:
+                    A1.IsChecked = true;
+                    break;
+                case Coding.Unicode:
+                    A2.IsChecked = true;
+                    break;
+            }
+            switch (CmdData.输出编码)
+            {
+                case Coding.ANSI:
+                    B3.IsChecked = true;
+                    break;
+                case Coding.UTF8:
+                    B1.IsChecked = true;
+                    break;
+                case Coding.Unicode:
+                    B2.IsChecked = true;
+                    break;
+            }
+            IsRun = true;
         }
         public CmdData Edit()
         {
@@ -36,6 +62,10 @@ namespace CmdControl
             CmdData.自动启动 = false;
             CmdData.路径 = "";
             CmdData.远程控制 = false;
+            CmdData.输入编码 = Coding.ANSI;
+            CmdData.输出编码 = Coding.ANSI;
+            A3.IsChecked = true;
+            B3.IsChecked = true;
         }
 
         private void save_Click(object sender, RoutedEventArgs e)
@@ -45,11 +75,13 @@ namespace CmdControl
 
         private void Choise_Click(object sender, RoutedEventArgs e)
         {
-            var openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            openFileDialog1.Title = "选择文件";
-            openFileDialog1.Filter = "文件|*.*";
-            openFileDialog1.FilterIndex = 2;
-            openFileDialog1.RestoreDirectory = true;
+            var openFileDialog1 = new System.Windows.Forms.OpenFileDialog
+            {
+                Title = "选择文件",
+                Filter = "文件|*.*",
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 if (!File.Exists(openFileDialog1.FileName))
@@ -68,6 +100,42 @@ namespace CmdControl
             {
                 CmdData.运行路径 = openFileDialog.SelectedPath;
             }
+        }
+
+        private void A1_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsRun)
+                CmdData.输入编码 = Coding.UTF8;
+        }
+
+        private void A2_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsRun)
+                CmdData.输入编码 = Coding.Unicode;
+        }
+
+        private void A3_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsRun)
+                CmdData.输入编码 = Coding.ANSI;
+        }
+
+        private void B1_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsRun)
+                CmdData.输出编码 = Coding.UTF8;
+        }
+
+        private void B2_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsRun)
+                CmdData.输出编码 = Coding.Unicode;
+        }
+
+        private void B3_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsRun)
+                CmdData.输出编码 = Coding.ANSI;
         }
     }
 }

@@ -3,6 +3,7 @@ using CmdControl.Objs;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -110,6 +111,13 @@ namespace CmdControl
                         await Restart();
                         break;
                     case FC.Input:
+                        if (CmdData.输入编码 != Coding.ANSI)
+                        {
+                            if (CmdData.输入编码 == Coding.UTF8)
+                                data = Encoding.UTF8.GetString(Encoding.Default.GetBytes(data));
+                            else if (CmdData.输入编码 == Coding.Unicode)
+                                data = Encoding.Unicode.GetString(Encoding.Default.GetBytes(data));
+                        }
                         StandardInput.WriteLine(data);
                         break;
                     case FC.Remove:
@@ -144,18 +152,38 @@ namespace CmdControl
 
         private void OnOutPut(object sender, DataReceivedEventArgs e)
         {
-            CmdShow.AddLog(e.Data);
+            if (e.Data == null)
+                return;
+            string data = e.Data;
+            if (CmdData.输出编码 != Coding.ANSI)
+            {
+                if (CmdData.输出编码 == Coding.UTF8)
+                    data = Encoding.UTF8.GetString(Encoding.Default.GetBytes(data));
+                else if (CmdData.输出编码 == Coding.Unicode)
+                    data = Encoding.Unicode.GetString(Encoding.Default.GetBytes(data));
+            }
+            CmdShow.AddLog(data);
             if (Send)
             {
-                App.SendMessage(e.Data);
+                App.SendMessage(data);
             }
         }
         private void OnErrorOutPut(object sender, DataReceivedEventArgs e)
         {
-            CmdShow.AddLog(e.Data);
+            if (e.Data == null)
+                return;
+            string data = e.Data;
+            if (CmdData.输出编码 != Coding.ANSI)
+            {
+                if (CmdData.输出编码 == Coding.UTF8)
+                    data = Encoding.Default.GetString(Encoding.UTF8.GetBytes(data));
+                else if (CmdData.输出编码 == Coding.Unicode)
+                    data = Encoding.Default.GetString(Encoding.Unicode.GetBytes(data));
+            }
+            CmdShow.AddLog(data);
             if (Send)
             {
-                App.SendMessage(e.Data);
+                App.SendMessage(data);
             }
         }
 

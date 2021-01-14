@@ -5,6 +5,10 @@ using System.Runtime.CompilerServices;
 
 namespace CmdControl.Objs
 {
+    public enum Coding
+    { 
+        UTF8, Unicode, ANSI
+    }
     public enum FC
     {
         Start, Stop, Restart, Input,
@@ -35,10 +39,34 @@ namespace CmdControl.Objs
         public bool 自动重启;
         public bool 启动反馈 = true;
         public bool 关闭反馈 = true;
+        public Coding 输入编码 = Coding.ANSI;
+        public Coding 输出编码 = Coding.ANSI;
     }
     public class CmdData : INotifyPropertyChanged
     {
         private CmdData_ CmdData_ = new();
+        public Coding 输入编码
+        {
+            get
+            {
+                return CmdData_.输入编码;
+            }
+            set
+            {
+                CmdData_.输入编码 = value;
+            }
+        }
+        public Coding 输出编码
+        {
+            get
+            {
+                return CmdData_.输出编码;
+            }
+            set
+            {
+                CmdData_.输出编码 = value;
+            }
+        }
         public string 名字
         {
             set
