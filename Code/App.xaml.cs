@@ -18,6 +18,8 @@ namespace CmdControl
     /// </summary>
     public partial class App : Application
     {
+        public const string Version = "1.0.1";
+
         public static ConfigObj Config { get; set; }
         public static string Local;
         public static MainWindow MainWindow_;
@@ -40,6 +42,11 @@ namespace CmdControl
         public static void ShowB(string title, string data)
         {
             notifyIcon.ShowBalloonTip(300, title, data, System.Windows.Forms.ToolTipIcon.Error);
+        }
+
+        public App()
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
         private static void Call(byte packid, string data)
@@ -178,30 +185,8 @@ namespace CmdControl
         }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            //WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            //WindowsPrincipal principal = new WindowsPrincipal(identity);
-            //if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
-            //{
-            //    ProcessStartInfo startInfo = new();
-            //    startInfo.UseShellExecute = true;
-            //    startInfo.WorkingDirectory = Environment.CurrentDirectory;
-            //    startInfo.FileName = Assembly.GetExecutingAssembly().Location;
-            //    startInfo.Verb = "runas";
-            //    try
-            //    {
-            //        Process.Start(startInfo);
-            //    }
-            //    catch
-            //    {
-            //        return;
-            //    }
-            //    Current.Shutdown();
-            //}
-
             ThisApp = this;
             Local = AppDomain.CurrentDomain.BaseDirectory;
-
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;

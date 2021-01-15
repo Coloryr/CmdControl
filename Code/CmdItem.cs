@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CmdControl
 {
-    public class CmdItem : IDisposable
+    public class CmdItem
     {
         public string 名字 { get; set; }
         public bool ProcessRun { get; private set; }
@@ -17,7 +17,7 @@ namespace CmdControl
 
         private CmdShow CmdShow;
         private UTabItem UTabItem;
-        private Process Process;
+        private Process ThisProcess;
         private StreamWriter StandardInput;
         private Thread Thread;
         private bool User;
@@ -49,9 +49,9 @@ namespace CmdControl
         {
             try
             {
-                while (Process != null)
+                while (ThisProcess != null)
                 {
-                    if (Process?.HasExited == true || Process == null)
+                    if (ThisProcess?.HasExited == true || ThisProcess == null)
                     {
                         OnDo(FC.Stop);
                         return;
@@ -96,6 +96,8 @@ namespace CmdControl
         }
         public void OnDo(FC type, string data = "")
         {
+            if (TaskRun)
+                return;
             App.Run(async () =>
             {
                 User = true;
@@ -144,6 +146,7 @@ namespace CmdControl
 
         private void OnClose(object sender, EventArgs e)
         {
+            ThisProcess = null;
             App.Run(() =>
             {
                 CmdShow.Set(false);
@@ -160,11 +163,11 @@ namespace CmdControl
             if (CmdData.输出编码 != Coding.ANSI)
             {
                 if (CmdData.输出编码 == Coding.UTF8)
-                    data = App.UTF8.GetString(Encoding.Default.GetBytes(data));
+                    data = App.ANSI.GetString(App.UTF8.GetBytes(data));
                 else if (CmdData.输出编码 == Coding.Unicode)
-                    data = App.Unicode.GetString(Encoding.Default.GetBytes(data));
+                    data = App.ANSI.GetString(App.Unicode.GetBytes(data));
                 else if (CmdData.输出编码 == Coding.GBK)
-                    data = App.GBK.GetString(Encoding.Default.GetBytes(data));
+                    data = App.ANSI.GetString(App.GBK.GetBytes(data));
             }
             CmdShow.AddLog(data);
             if (Send)
@@ -180,11 +183,11 @@ namespace CmdControl
             if (CmdData.输出编码 != Coding.ANSI)
             {
                 if (CmdData.输出编码 == Coding.UTF8)
-                    data = App.UTF8.GetString(Encoding.Default.GetBytes(data));
+                    data = App.ANSI.GetString(App.UTF8.GetBytes(data));
                 else if (CmdData.输出编码 == Coding.Unicode)
-                    data = App.Unicode.GetString(Encoding.Default.GetBytes(data));
+                    data = App.ANSI.GetString(App.Unicode.GetBytes(data));
                 else if (CmdData.输出编码 == Coding.GBK)
-                    data = App.GBK.GetString(Encoding.Default.GetBytes(data));
+                    data = App.ANSI.GetString(App.GBK.GetBytes(data));
             }
             CmdShow.AddLog(data);
             if (Send)
@@ -195,8 +198,6 @@ namespace CmdControl
 
         private async Task Remove()
         {
-            if (TaskRun)
-                return;
             TaskRun = true;
             await Stop();
             App.MainWindow_.Remove(UTabItem);
@@ -206,17 +207,15 @@ namespace CmdControl
 
         private async Task Start()
         {
-            if (TaskRun)
-                return;
             TaskRun = true;
             CmdShow.Set(true);
             ProcessRun = true;
             CmdShow.Clear();
             try
             {
-                if (Process != null)
+                if (ThisProcess != null)
                 {
-                    Process.Dispose();
+                    ThisProcess.Dispose();
                 }
                 var ProcessStartInfo = new ProcessStartInfo()
                 {
@@ -238,21 +237,21 @@ namespace CmdControl
                     TaskRun = false;
                     return;
                 }
-                Process = new()
+                ThisProcess = new()
                 {
                     StartInfo = ProcessStartInfo
                 };
-                Process.OutputDataReceived += OnOutPut;
-                Process.ErrorDataReceived += OnErrorOutPut;
-                Process.Start();
-                Process.BeginOutputReadLine();
-                Process.BeginErrorReadLine();
-                StandardInput = Process.StandardInput;
+                ThisProcess.OutputDataReceived += OnOutPut;
+                ThisProcess.ErrorDataReceived += OnErrorOutPut;
+                ThisProcess.Start();
+                ThisProcess.BeginOutputReadLine();
+                ThisProcess.BeginErrorReadLine();
+                StandardInput = ThisProcess.StandardInput;
                 UTabItem.ShowColor = "Lime";
                 await Task.Run(() =>
                 {
                     Thread.Sleep(20);
-                    if (Process?.HasExited == false)
+                    if (ThisProcess?.HasExited == false)
                     {
                         var temp = CmdData.命令.Split('\n');
                         foreach (var item in temp)
@@ -267,7 +266,7 @@ namespace CmdControl
             catch (Exception e)
             {
                 CmdShow.AddLog(e.ToString());
-                Process.Dispose();
+                ThisProcess.Dispose();
                 CmdShow.Set(false);
                 ProcessRun = false;
             }
@@ -279,21 +278,27 @@ namespace CmdControl
 
         private async Task Stop()
         {
-            if (TaskRun)
-                return;
             TaskRun = true;
-            if (Process?.HasExited == false)
+            if (ThisProcess != null && ThisProcess.HasExited == false)
             {
+                App.ShowA("关闭", $"正在关闭[{CmdData.名字}]");
                 if (!string.IsNullOrWhiteSpace(CmdData.关闭指令))
                 {
                     StandardInput.WriteLine(CmdData.关闭指令);
                 }
-                Process.CloseMainWindow();
-                if (Process?.HasExited == false)
+                ThisProcess.CloseMainWindow();
+                if (ThisProcess.HasExited == false)
                 {
-                    await Process.WaitForExitAsync();
+                    var task1 = ThisProcess.WaitForExitAsync();
+                    var task2 = Task.Delay(10000);
+                    var res = await Task.WhenAny(task1, task2);
+                    if (res == task2)
+                    {
+                        App.ShowA("关闭", $"实例[{CmdData.名字}]关闭时间过长，强制结束");
+                        ThisProcess.Kill(true);
+                    }
                 }
-                Process.Dispose();
+                ThisProcess.Dispose();
             }
             OnClose(null, null);
             App.MainWindow_.RunCount--;
@@ -312,23 +317,17 @@ namespace CmdControl
 
         private void Kill()
         {
-            if (Process?.HasExited == false)
+            TaskRun = true;
+            if (ThisProcess?.HasExited == false)
             {
-                Process.Kill();
-                Process.Dispose();
+                ThisProcess.Kill(true);
+                ThisProcess.Dispose();
             }
             OnClose(null, null);
             App.MainWindow_.RunCount--;
             if (CmdData.关闭反馈)
                 App.SendMessage($"实例[{CmdData.名字}]已强制结束");
             TaskRun = false;
-        }
-
-        public void Dispose()
-        {
-            Kill();
-            StandardInput.Dispose();
-            GC.SuppressFinalize(this);
         }
     }
 }
