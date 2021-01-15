@@ -7,7 +7,7 @@ namespace CmdControl.Objs
 {
     public enum Coding
     { 
-        UTF8, Unicode, ANSI
+        UTF8, Unicode, ANSI, GBK
     }
     public enum FC
     {

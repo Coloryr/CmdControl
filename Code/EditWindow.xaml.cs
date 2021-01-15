@@ -29,6 +29,9 @@ namespace CmdControl
                 case Coding.Unicode:
                     A2.IsChecked = true;
                     break;
+                case Coding.GBK:
+                    A4.IsChecked = true;
+                    break;
             }
             switch (CmdData.输出编码)
             {
@@ -40,6 +43,9 @@ namespace CmdControl
                     break;
                 case Coding.Unicode:
                     B2.IsChecked = true;
+                    break;
+                case Coding.GBK:
+                    B4.IsChecked = true;
                     break;
             }
             IsRun = true;
@@ -136,6 +142,18 @@ namespace CmdControl
         {
             if (IsRun)
                 CmdData.输出编码 = Coding.ANSI;
+        }
+
+        private void A4_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsRun)
+                CmdData.输入编码 = Coding.GBK;
+        }
+
+        private void B4_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsRun)
+                CmdData.输出编码 = Coding.GBK;
         }
     }
 }

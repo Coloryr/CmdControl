@@ -114,9 +114,11 @@ namespace CmdControl
                         if (CmdData.输入编码 != Coding.ANSI)
                         {
                             if (CmdData.输入编码 == Coding.UTF8)
-                                data = Encoding.UTF8.GetString(Encoding.Default.GetBytes(data));
+                                data = App.UTF8.GetString(Encoding.Default.GetBytes(data));
                             else if (CmdData.输入编码 == Coding.Unicode)
-                                data = Encoding.Unicode.GetString(Encoding.Default.GetBytes(data));
+                                data = App.Unicode.GetString(Encoding.Default.GetBytes(data));
+                            else if (CmdData.输入编码 == Coding.GBK)
+                                data = App.GBK.GetString(Encoding.Default.GetBytes(data));
                         }
                         StandardInput.WriteLine(data);
                         break;
@@ -158,9 +160,11 @@ namespace CmdControl
             if (CmdData.输出编码 != Coding.ANSI)
             {
                 if (CmdData.输出编码 == Coding.UTF8)
-                    data = Encoding.UTF8.GetString(Encoding.Default.GetBytes(data));
+                    data = App.UTF8.GetString(Encoding.Default.GetBytes(data));
                 else if (CmdData.输出编码 == Coding.Unicode)
-                    data = Encoding.Unicode.GetString(Encoding.Default.GetBytes(data));
+                    data = App.Unicode.GetString(Encoding.Default.GetBytes(data));
+                else if (CmdData.输出编码 == Coding.GBK)
+                    data = App.GBK.GetString(Encoding.Default.GetBytes(data));
             }
             CmdShow.AddLog(data);
             if (Send)
@@ -176,9 +180,11 @@ namespace CmdControl
             if (CmdData.输出编码 != Coding.ANSI)
             {
                 if (CmdData.输出编码 == Coding.UTF8)
-                    data = Encoding.Default.GetString(Encoding.UTF8.GetBytes(data));
+                    data = App.UTF8.GetString(Encoding.Default.GetBytes(data));
                 else if (CmdData.输出编码 == Coding.Unicode)
-                    data = Encoding.Default.GetString(Encoding.Unicode.GetBytes(data));
+                    data = App.Unicode.GetString(Encoding.Default.GetBytes(data));
+                else if (CmdData.输出编码 == Coding.GBK)
+                    data = App.GBK.GetString(Encoding.Default.GetBytes(data));
             }
             CmdShow.AddLog(data);
             if (Send)

@@ -25,6 +25,11 @@ namespace CmdControl
         public static App ThisApp;
         public static System.Windows.Forms.NotifyIcon notifyIcon;
 
+        public readonly static Encoding GBK = Encoding.GetEncoding("GBK");
+        public readonly static Encoding UTF8 = Encoding.UTF8;
+        public readonly static Encoding Unicode = Encoding.Unicode;
+        public readonly static Encoding ANSI = Encoding.Default;
+
         private static CmdItem ShowItem;
         private static Robot Robot;
         private static RobotConfig RobotConfig;

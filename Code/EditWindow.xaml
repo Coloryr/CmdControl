@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CmdControl"
         mc:Ignorable="d"
-        Title="配置设置" Height="335" Width="536" ResizeMode="CanMinimize" Icon="/Color_yr.ico">
+        Title="配置设置" Height="340" Width="536" ResizeMode="CanMinimize" Icon="/Color_yr.ico">
     <Grid>
         <Rectangle Fill="#FFF4F4F5" Stroke="#FF5ABED6" StrokeThickness="2"/>
         <Label Content="实例名字" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0"/>
@@ -39,15 +39,17 @@
         <Button Content="选择路径" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="140,280,0,0" Width="60" Click="Dir_Click"/>
         <Button Content="保存" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="205,280,0,0" Width="60" Click="save_Click"/>
         <Label Content="输入编码" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,250,0,0"/>
-        <StackPanel Margin="60,253,0,0" Orientation="Horizontal" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150">
+        <StackPanel Margin="60,253,0,0" Orientation="Horizontal" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200">
             <RadioButton Content="UTF-8" Width="50" Style="{DynamicResource RadioButton_Left}" x:Name="A1" Checked="A1_Checked"/>
             <RadioButton Content="Unicode" Width="50" Style="{DynamicResource RadioButton_Middle}" x:Name="A2" Checked="A2_Checked"/>
+            <RadioButton Content="GBK" Width="50" Style="{DynamicResource RadioButton_Middle}" x:Name="A4" Checked="A4_Checked"/>
             <RadioButton Content="不转码" Width="50" Style="{DynamicResource RadioButton_Right}" IsChecked="True" Name="A3" Checked="A3_Checked"/>
         </StackPanel>
-        <Label Content="输出编码" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="211,250,0,0"/>
-        <StackPanel Margin="268,253,0,0" Orientation="Horizontal" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150">
+        <Label Content="输出编码" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="260,250,0,0"/>
+        <StackPanel Margin="318,253,0,0" Orientation="Horizontal" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200">
             <RadioButton Content="UTF-8" Width="50" Style="{DynamicResource RadioButton_Left}" x:Name="B1" Checked="B1_Checked"/>
             <RadioButton Content="Unicode" Width="50" Style="{DynamicResource RadioButton_Middle}" x:Name="B2" Checked="B2_Checked"/>
+            <RadioButton Content="GBK" Width="50" Style="{DynamicResource RadioButton_Middle}" x:Name="B4" Checked="B4_Checked"/>
             <RadioButton Content="不转码" Width="50" Style="{DynamicResource RadioButton_Right}" IsChecked="True" Name="B3" Checked="B3_Checked"/>
         </StackPanel>
     </Grid>
