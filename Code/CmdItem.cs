@@ -304,7 +304,7 @@ namespace CmdControl
             App.MainWindow_.RunCount--;
             if (CmdData.关闭反馈)
                 App.SendMessage($"实例[{CmdData.名字}]已关闭");
-            if (!User && CmdData.自动启动)
+            if (!User && CmdData.自动重启)
             {
                 await Task.Run(() =>
                 {
