@@ -53,7 +53,7 @@ namespace CmdControl
                 {
                     if (ThisProcess?.HasExited == true || ThisProcess == null)
                     {
-                        OnDo(FC.Stop);
+                        Stop().Wait();
                         return;
                     }
                     Thread.Sleep(100);
@@ -85,63 +85,60 @@ namespace CmdControl
                 UTabItem.Content = CmdShow;
             });
             App.MainWindow_.Add(UTabItem);
-            Task.Run(() =>
+            if (CmdData.自动启动)
             {
-                Thread.Sleep(500);
-                if (CmdData.自动启动)
+                Task.Run(() =>
                 {
-                    App.Run(() => OnDo(FC.Start));
-                }
-            });
+                    Thread.Sleep(500);
+                    OnDo(FC.Start);
+                });
+            }
         }
-        public void OnDo(FC type, string data = "")
+        public async void OnDo(FC type, string data = "")
         {
             if (TaskRun)
                 return;
-            App.Run(async () =>
+            User = true;
+            switch (type)
             {
-                User = true;
-                switch (type)
-                {
-                    case FC.Start:
-                        await Start();
-                        break;
-                    case FC.Stop:
-                        await Stop();
-                        break;
-                    case FC.Restart:
-                        await Restart();
-                        break;
-                    case FC.Input:
-                        if (CmdData.输入编码 != Coding.ANSI)
-                        {
-                            if (CmdData.输入编码 == Coding.UTF8)
-                                data = App.UTF8.GetString(Encoding.Default.GetBytes(data));
-                            else if (CmdData.输入编码 == Coding.Unicode)
-                                data = App.Unicode.GetString(Encoding.Default.GetBytes(data));
-                            else if (CmdData.输入编码 == Coding.GBK)
-                                data = App.GBK.GetString(Encoding.Default.GetBytes(data));
-                        }
-                        StandardInput.WriteLine(data);
-                        break;
-                    case FC.Remove:
-                        await Remove();
-                        break;
-                    case FC.Kill:
-                        Kill();
-                        break;
-                    case FC.Edit:
-                        UTabItem.Header = CmdData.名字;
-                        break;
-                }
-                User = false;
-            });
+                case FC.Start:
+                    Start();
+                    break;
+                case FC.Stop:
+                    await Stop();
+                    break;
+                case FC.Restart:
+                    await Restart();
+                    break;
+                case FC.Input:
+                    if (CmdData.输入编码 != Coding.ANSI)
+                    {
+                        if (CmdData.输入编码 == Coding.UTF8)
+                            data = App.UTF8.GetString(Encoding.Default.GetBytes(data));
+                        else if (CmdData.输入编码 == Coding.Unicode)
+                            data = App.Unicode.GetString(Encoding.Default.GetBytes(data));
+                        else if (CmdData.输入编码 == Coding.GBK)
+                            data = App.GBK.GetString(Encoding.Default.GetBytes(data));
+                    }
+                    StandardInput.WriteLine(data);
+                    break;
+                case FC.Remove:
+                    await Remove();
+                    break;
+                case FC.Kill:
+                    Kill();
+                    break;
+                case FC.Edit:
+                    UTabItem.Header = CmdData.名字;
+                    break;
+            }
+            User = false;
         }
 
         private async Task Restart()
         {
             await Stop();
-            await Start();
+            Start();
         }
 
         private void OnClose(object sender, EventArgs e)
@@ -205,19 +202,21 @@ namespace CmdControl
             TaskRun = false;
         }
 
-        private async Task Start()
+        private void Start()
         {
             TaskRun = true;
-            CmdShow.Set(true);
-            ProcessRun = true;
-            CmdShow.Clear();
+            App.Run(() =>
+            {
+                CmdShow.Set(true);
+                CmdShow.Clear();
+            });
             try
             {
                 if (ThisProcess != null)
                 {
                     ThisProcess.Dispose();
                 }
-                var ProcessStartInfo = new ProcessStartInfo()
+                ProcessStartInfo ProcessStartInfo = new()
                 {
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -231,8 +230,11 @@ namespace CmdControl
                 CmdData.路径 = CmdData.路径.Trim();
                 if (!File.Exists(CmdData.路径))
                 {
-                    CmdShow.AddLog($"文件{CmdData.路径}不存在");
-                    CmdShow.Set(false);
+                    App.Run(() =>
+                    {
+                        CmdShow.AddLog($"文件{CmdData.路径}不存在");
+                        CmdShow.Set(false);
+                    });
                     ProcessRun = false;
                     TaskRun = false;
                     return;
@@ -247,19 +249,20 @@ namespace CmdControl
                 ThisProcess.BeginOutputReadLine();
                 ThisProcess.BeginErrorReadLine();
                 StandardInput = ThisProcess.StandardInput;
-                UTabItem.ShowColor = "Lime";
-                await Task.Run(() =>
+                App.Run(() =>
                 {
-                    Thread.Sleep(20);
-                    if (ThisProcess?.HasExited == false)
-                    {
-                        var temp = CmdData.命令.Split('\n');
-                        foreach (var item in temp)
-                        {
-                            StandardInput.WriteLine(item);
-                        }
-                    }
+                    UTabItem.ShowColor = "Lime";
                 });
+                ProcessRun = true;
+                Thread.Sleep(20);
+                if (ThisProcess?.HasExited == false)
+                {
+                    var temp = CmdData.命令.Split('\n');
+                    foreach (var item in temp)
+                    {
+                        StandardInput.WriteLine(item);
+                    }
+                }
                 Thread = new Thread(Check);
                 Thread.Start();
             }
@@ -278,6 +281,8 @@ namespace CmdControl
 
         private async Task Stop()
         {
+            if (TaskRun)
+                return;
             TaskRun = true;
             if (ThisProcess != null && ThisProcess.HasExited == false)
             {
@@ -298,7 +303,7 @@ namespace CmdControl
                         ThisProcess.Kill(true);
                     }
                 }
-                ThisProcess.Dispose();
+                ThisProcess?.Dispose();
             }
             OnClose(null, null);
             App.MainWindow_.RunCount--;
@@ -306,11 +311,8 @@ namespace CmdControl
                 App.SendMessage($"实例[{CmdData.名字}]已关闭");
             if (!User && CmdData.自动重启)
             {
-                await Task.Run(() =>
-                {
-                    Thread.Sleep(100);
-                    OnDo(FC.Start);
-                });
+                Thread.Sleep(100);
+                Start();
             }
             TaskRun = false;
         }
