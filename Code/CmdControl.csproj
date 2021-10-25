@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -7,12 +7,11 @@
     <ApplicationIcon>Color_yr.ico</ApplicationIcon>
     <Version>1.0.1</Version>
     <Authors>Coloryr</Authors>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <BaseOutputPath>..\build_out\</BaseOutputPath>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\build_out\</OutputPath>
-  </PropertyGroup>
-
+	
   <ItemGroup>
     <None Remove="Color_yr.ico" />
   </ItemGroup>
