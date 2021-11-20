@@ -2,12 +2,11 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Color_yr.ico</ApplicationIcon>
     <Version>1.0.1</Version>
     <Authors>Coloryr</Authors>
-    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
     <BaseOutputPath>..\build_out\</BaseOutputPath>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
